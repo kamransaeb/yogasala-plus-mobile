@@ -1,5 +1,5 @@
 name: yogasala_plus_mobile
-description: "A new Flutter project."
+description: "Yoga Sala Plus"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -34,6 +34,31 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  enterprise_logger:
+    git:
+      url: https://github.com/kamransaeb/flutter_enterprise_packages.git
+      path: packages/enterprise_logger
+      ref: v0.1.1
+  enterprise_core:
+    git:
+      url: https://github.com/kamransaeb/flutter_enterprise_packages.git
+      path: packages/enterprise_core
+      ref: v0.1.1
+  enterprise_storage:
+    git:
+      url: https://github.com/kamransaeb/flutter_enterprise_packages.git
+      path: packages/enterprise_storage
+      ref: v0.1.1
+  enterprise_network:
+    git:
+      url: https://github.com/kamransaeb/flutter_enterprise_packages.git
+      path: packages/enterprise_network
+      ref: v0.1.1
+  enterprise_ui:
+    git:
+      url: https://github.com/kamransaeb/flutter_enterprise_packages.git
+      path: packages/enterprise_ui
+      ref: v0.1.1
 
 dev_dependencies:
   flutter_test:
