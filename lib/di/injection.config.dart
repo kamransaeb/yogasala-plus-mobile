@@ -17,6 +17,7 @@ import 'package:enterprise_core/enterprise_core.dart' as _i89;
 import 'package:enterprise_logger/enterprise_logger.dart' as _i194;
 import 'package:enterprise_network/enterprise_network.dart' as _i496;
 import 'package:enterprise_storage/enterprise_storage.dart' as _i42;
+import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -24,10 +25,10 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
     as _i161;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
+import '../app/app_config.dart' as _i975;
 import '../core/navigation/app_router.dart' as _i159;
 import '../core/theme/theme_bloc.dart' as _i905;
 import '../errors/app_error_reporter.dart' as _i589;
-import '../features/auth/data/api/auth_api_client.dart' as _i1005;
 import '../features/auth/data/datasources/auth_local_data_source.dart' as _i109;
 import '../features/auth/data/datasources/auth_local_data_source_impl.dart'
     as _i889;
@@ -55,6 +56,7 @@ import '../features/posts/domain/usecases/get_post_usecase.dart' as _i226;
 import '../features/posts/domain/usecases/get_posts_usecase.dart' as _i717;
 import '../features/posts/presentation/bloc/posts_bloc.dart' as _i71;
 import 'modules/core_module.dart' as _i134;
+import 'modules/firebase_module.dart' as _i398;
 import 'modules/logger_module.dart' as _i205;
 import 'modules/network_module.dart' as _i851;
 import 'modules/storage_module.dart' as _i148;
@@ -68,6 +70,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final storageModule = _$StorageModule();
     final loggerModule = _$LoggerModule();
+    final firebaseModule = _$FirebaseModule();
     final networkModule = _$NetworkModule();
     final coreModule = _$CoreModule();
     await gh.factoryAsync<_i460.SharedPreferences>(
@@ -80,6 +83,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i558.FlutterSecureStorage>(
       () => storageModule.flutterSecureStorage,
     );
+    gh.lazySingleton<_i59.FirebaseAuth>(() => firebaseModule.firebaseAuth);
     gh.lazySingleton<_i895.Connectivity>(() => networkModule.connectivity);
     gh.lazySingleton<_i161.InternetConnection>(
       () => networkModule.internetConnection,
@@ -87,18 +91,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i833.DeviceInfoPlugin>(
       () => networkModule.deviceInfoPlugin,
     );
-    gh.lazySingleton<_i496.NetworkClientConfig>(
-      () => networkModule.networkClientConfig,
-    );
     gh.lazySingleton<_i496.DeviceNetworkInfo>(
       () => networkModule.deviceNetworkInfo(gh<_i833.DeviceInfoPlugin>()),
     );
     gh.singleton<_i194.LoggerService>(
       () => loggerModule.loggerService(gh<_i194.LoggerConfig>()),
     );
+    gh.lazySingleton<_i719.AuthRemoteDataSource>(
+      () => _i902.AuthRemoteDataSourceImpl(gh<_i59.FirebaseAuth>()),
+    );
     gh.singleton<_i42.LocalStorage>(
       () => storageModule.hiveStorage(gh<_i194.LoggerService>()),
       instanceName: 'hive_storage',
+    );
+    gh.lazySingleton<_i496.NetworkClientConfig>(
+      () => networkModule.networkClientConfig(gh<_i975.AppConfig>()),
     );
     gh.singleton<_i42.HiveStorage>(
       () => storageModule.hiveStorageConcrete(
@@ -164,24 +171,15 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.lazySingleton<_i361.Dio>(() => networkModule.dio(gh<_i496.DioClient>()));
-    gh.lazySingleton<_i1005.AuthApiClient>(
-      () => _i1005.AuthApiClient(gh<_i496.DioClient>()),
-    );
-    gh.lazySingleton<_i347.PostsApiClient>(
-      () => _i347.PostsApiClient(gh<_i496.DioClient>()),
-    );
-    gh.lazySingleton<_i719.AuthRemoteDataSource>(
-      () => _i902.AuthRemoteDataSourceImpl(gh<_i1005.AuthApiClient>()),
-    );
-    gh.lazySingleton<_i414.PostsRemoteDataSource>(
-      () => _i510.PostsRemoteDataSourceImpl(gh<_i347.PostsApiClient>()),
-    );
     gh.lazySingleton<_i869.AuthRepository>(
       () => _i570.AuthRepositoryImpl(
         gh<_i719.AuthRemoteDataSource>(),
         gh<_i109.AuthLocalDataSource>(),
         gh<_i89.ErrorHandler>(),
       ),
+    );
+    gh.lazySingleton<_i347.PostsApiClient>(
+      () => _i347.PostsApiClient(gh<_i496.DioClient>()),
     );
     gh.factory<_i403.CheckAuthStatusUseCase>(
       () => _i403.CheckAuthStatusUseCase(gh<_i869.AuthRepository>()),
@@ -192,18 +190,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i406.LoginUseCase>(
       () => _i406.LoginUseCase(gh<_i869.AuthRepository>()),
     );
-    gh.lazySingleton<_i57.PostsRepository>(
-      () => _i799.PostsRepositoryImpl(
-        gh<_i414.PostsRemoteDataSource>(),
-        gh<_i89.ErrorHandler>(),
-      ),
-    );
     gh.lazySingleton<_i476.AuthBloc>(
       () => _i476.AuthBloc(
         gh<_i406.LoginUseCase>(),
         gh<_i11.LogoutUseCase>(),
         gh<_i403.CheckAuthStatusUseCase>(),
         gh<_i194.LoggerService>(),
+      ),
+    );
+    gh.lazySingleton<_i414.PostsRemoteDataSource>(
+      () => _i510.PostsRemoteDataSourceImpl(gh<_i347.PostsApiClient>()),
+    );
+    gh.lazySingleton<_i57.PostsRepository>(
+      () => _i799.PostsRepositoryImpl(
+        gh<_i414.PostsRemoteDataSource>(),
+        gh<_i89.ErrorHandler>(),
       ),
     );
     gh.factory<_i717.GetPostsUseCase>(
@@ -225,6 +226,8 @@ extension GetItInjectableX on _i174.GetIt {
 class _$StorageModule extends _i148.StorageModule {}
 
 class _$LoggerModule extends _i205.LoggerModule {}
+
+class _$FirebaseModule extends _i398.FirebaseModule {}
 
 class _$NetworkModule extends _i851.NetworkModule {}
 

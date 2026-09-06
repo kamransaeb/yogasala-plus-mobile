@@ -1,11 +1,12 @@
+import 'package:dartz/dartz.dart';
+import 'package:enterprise_core/enterprise_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_tokens.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_user.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/repositories/auth_repository.dart';
-import 'package:dartz/dartz.dart';
-import 'package:enterprise_core/enterprise_core.dart';
-import 'package:injectable/injectable.dart';
 
 /// The implementation of the [AuthRepository].
 @LazySingleton(as: AuthRepository)
@@ -61,7 +62,7 @@ class AuthRepositoryImpl implements AuthRepository {
     return const Right(null);
   }
 
-   @override
+  @override
   Future<Either<Failure, AuthTokens>> refreshTokens() async {
     try {
       final cached = await _local.getCachedTokens();
@@ -111,9 +112,6 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<bool> isAuthenticated() async {
-    final tokens = await _local.getCachedTokens();
-    if (tokens == null) return false;
-    return !tokens.toEntity().isExpired;
+    return FirebaseAuth.instance.currentUser != null;
   }
-
 }

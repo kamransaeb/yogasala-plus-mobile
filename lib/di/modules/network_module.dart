@@ -1,5 +1,3 @@
-import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
-import 'package:yogasala_plus_mobile/network/hive_network_cache_store.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
@@ -8,6 +6,9 @@ import 'package:enterprise_network/enterprise_network.dart';
 import 'package:enterprise_storage/enterprise_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:yogasala_plus_mobile/app/app_config.dart';
+import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
+import 'package:yogasala_plus_mobile/network/hive_network_cache_store.dart';
 
 /// Injectable bindings for network utilities and helpers.
 @module
@@ -48,11 +49,14 @@ abstract class NetworkModule {
 
   /// App-owned HTTP config (no AppConfig in packages).
   @lazySingleton
-  NetworkClientConfig get networkClientConfig => const NetworkClientConfig(
-    baseUrl: 'https://jsonplaceholder.typicode.com',
-  );
+  NetworkClientConfig networkClientConfig(AppConfig appConfig) =>
+      NetworkClientConfig(
+        baseUrl: appConfig.apiBaseUrl.isNotEmpty
+            ? appConfig.apiBaseUrl
+            : 'https://jsonplaceholder.typicode.com',
+      );
 
-  /// Provides [NetworkCacheStore] backed by [HiveNetworkCacheStore] for 
+  /// Provides [NetworkCacheStore] backed by [HiveNetworkCacheStore] for
   /// caching network requests.
   @lazySingleton
   NetworkCacheStore networkCacheStore(
@@ -70,11 +74,12 @@ abstract class NetworkModule {
     LoggerService logger,
     DeviceNetworkInfo deviceInfo,
     @Named(DiConstants.secureStorage) LocalStorage secureStorage,
-    NetworkCacheStore cacheStore, 
+    NetworkCacheStore cacheStore,
   ) {
     final client = DioClient(
       config,
       logger,
+
       // Interceptors in order:
       // 1. HeaderInterceptor
       // 2. AuthInterceptor
@@ -82,17 +87,16 @@ abstract class NetworkModule {
       // 4. LoggingInterceptor
       // 5. RetryInterceptor
       // 6. ErrorInterceptor
-     
       interceptors: [
-  HeaderInterceptor(
-    deviceInfo,
-    () => {NetworkConstants.acceptLanguage: 'en'},
-  ),
-  CacheInterceptor(logger, cacheStore),
-  if (config.enableLogging) LoggingInterceptor(logger),
-  RetryInterceptor(logger),
-  ErrorInterceptor(logger),
-],
+        HeaderInterceptor(
+          deviceInfo,
+          () => {NetworkConstants.acceptLanguage: 'en'},
+        ),
+        CacheInterceptor(logger, cacheStore),
+        if (config.enableLogging) LoggingInterceptor(logger),
+        RetryInterceptor(logger),
+        ErrorInterceptor(logger),
+      ],
     );
     return client;
   }

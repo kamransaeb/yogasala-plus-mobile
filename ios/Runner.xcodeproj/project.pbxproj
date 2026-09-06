@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -53,6 +53,15 @@
 		087F9D50304C8F5000E9B9FE /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		087F9D6F304D8C6D00E9B9FE /* Profile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Profile.xcconfig; path = Flutter/Profile.xcconfig; sourceTree = "<group>"; };
 		087F9D73304D92EF00E9B9FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		087F9D75304DB45B00E9B9FE /* Debug-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug-dev.xcconfig"; sourceTree = "<group>"; };
+		087F9D76304DB45B00E9B9FE /* Debug-prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug-prod.xcconfig"; sourceTree = "<group>"; };
+		087F9D77304DB45B00E9B9FE /* Debug-staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug-staging.xcconfig"; sourceTree = "<group>"; };
+		087F9D78304DB45B00E9B9FE /* Profile-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Profile-dev.xcconfig"; sourceTree = "<group>"; };
+		087F9D79304DB45B00E9B9FE /* Profile-prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Profile-prod.xcconfig"; sourceTree = "<group>"; };
+		087F9D7A304DB45B00E9B9FE /* Profile-staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Profile-staging.xcconfig"; sourceTree = "<group>"; };
+		087F9D7B304DB45B00E9B9FE /* Release-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release-dev.xcconfig"; sourceTree = "<group>"; };
+		087F9D7C304DB45B00E9B9FE /* Release-prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release-prod.xcconfig"; sourceTree = "<group>"; };
+		087F9D7D304DB45B00E9B9FE /* Release-staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release-staging.xcconfig"; sourceTree = "<group>"; };
 		0A3BE4D9CAB5B1F97045C91D /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		11AFFF832CAC8AF27C201EE9 /* Pods-RunnerTests.profile-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile-staging.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile-staging.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
@@ -174,6 +183,15 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				087F9D75304DB45B00E9B9FE /* Debug-dev.xcconfig */,
+				087F9D76304DB45B00E9B9FE /* Debug-prod.xcconfig */,
+				087F9D77304DB45B00E9B9FE /* Debug-staging.xcconfig */,
+				087F9D78304DB45B00E9B9FE /* Profile-dev.xcconfig */,
+				087F9D79304DB45B00E9B9FE /* Profile-prod.xcconfig */,
+				087F9D7A304DB45B00E9B9FE /* Profile-staging.xcconfig */,
+				087F9D7B304DB45B00E9B9FE /* Release-dev.xcconfig */,
+				087F9D7C304DB45B00E9B9FE /* Release-prod.xcconfig */,
+				087F9D7D304DB45B00E9B9FE /* Release-staging.xcconfig */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -249,6 +267,7 @@
 			buildPhases = (
 				A5F1DA938532278BA942FD72 /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
+				087F9D87304DB87C00E9B9FE /* My Copy GoogleService-Info */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
@@ -335,6 +354,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		087F9D87304DB87C00E9B9FE /* My Copy GoogleService-Info */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "My Copy GoogleService-Info";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\nset -euo pipefail\n\ncase \"${CONFIGURATION}\" in\n  *-dev)      FLAVOR=dev ;;\n  *-staging)  FLAVOR=staging ;;\n  *-prod)     FLAVOR=prod ;;\n  *)          FLAVOR=prod ;;\nesac\n\nSRC=\"${PROJECT_DIR}/config/${FLAVOR}/GoogleService-Info.plist\"\nDST=\"${PROJECT_DIR}/Runner/GoogleService-Info.plist\"\n\necho \"CONFIGURATION=${CONFIGURATION}\"\necho \"Copying GoogleService-Info.plist for flavor: ${FLAVOR}\"\necho \"SRC=${SRC}\"\n\nif [[ ! -f \"${SRC}\" ]]; then\n  echo \"error: Missing ${SRC}\"\n  exit 1\nfi\n\ncp \"${SRC}\" \"${DST}\"\necho \"Copied GoogleService-Info.plist for flavor: ${FLAVOR}\"\n";
+		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -520,7 +558,7 @@
 		};
 		087F9D3A304C8E3B00E9B9FE /* Debug-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A0347F0BF4E776D16782060D /* Pods-Runner.debug-dev.xcconfig */;
+			baseConfigurationReference = 087F9D75304DB45B00E9B9FE /* Debug-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -617,7 +655,7 @@
 		};
 		087F9D3D304C8E4100E9B9FE /* Release-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 462E1292D4660ACD7D663876 /* Pods-Runner.release-dev.xcconfig */;
+			baseConfigurationReference = 087F9D78304DB45B00E9B9FE /* Profile-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -709,7 +747,7 @@
 		};
 		087F9D40304C8E4600E9B9FE /* Profile-dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E6DA8B88F43DB70EA3B857D9 /* Pods-Runner.profile-dev.xcconfig */;
+			baseConfigurationReference = 087F9D78304DB45B00E9B9FE /* Profile-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -806,7 +844,7 @@
 		};
 		087F9D43304C8E5F00E9B9FE /* Debug-staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A05553615004C69705B7148C /* Pods-Runner.debug-staging.xcconfig */;
+			baseConfigurationReference = 087F9D77304DB45B00E9B9FE /* Debug-staging.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -903,7 +941,7 @@
 		};
 		087F9D46304C8E6700E9B9FE /* Release-staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2ED880F9FCEC0747A4DCF583 /* Pods-Runner.release-staging.xcconfig */;
+			baseConfigurationReference = 087F9D7D304DB45B00E9B9FE /* Release-staging.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -995,7 +1033,7 @@
 		};
 		087F9D49304C8E6D00E9B9FE /* Profile-staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2B15053FC981A50323C93787 /* Pods-Runner.profile-staging.xcconfig */;
+			baseConfigurationReference = 087F9D7A304DB45B00E9B9FE /* Profile-staging.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1092,7 +1130,7 @@
 		};
 		087F9D4C304C8E7300E9B9FE /* Debug-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 543C28222C26A277A971764F /* Pods-Runner.debug-prod.xcconfig */;
+			baseConfigurationReference = 087F9D76304DB45B00E9B9FE /* Debug-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1189,7 +1227,7 @@
 		};
 		087F9D55304C902100E9B9FE /* Release-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA1DDEB08049D456791C3582 /* Pods-Runner.release-prod.xcconfig */;
+			baseConfigurationReference = 087F9D7C304DB45B00E9B9FE /* Release-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1281,7 +1319,7 @@
 		};
 		087F9D58304C902800E9B9FE /* Profile-prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6DBF6C11B1BAB9CA920A1219 /* Pods-Runner.profile-prod.xcconfig */;
+			baseConfigurationReference = 087F9D79304DB45B00E9B9FE /* Profile-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
