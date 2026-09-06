@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "319630875296",
+    "project_id": "yogasala-plus-staging",
+    "storage_bucket": "yogasala-plus-staging.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319630875296:android:a2fc5927f1cf1e5f9887c5",
+        "android_client_info": {
+          "package_name": "com.yogasala.plus.mobile.staging"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn6SpPYZxFE41KM0-O900jzyZn4jK9Tcs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

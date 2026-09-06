@@ -1,0 +1,6 @@
+#include "Flutter/Generated.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER=com.yogasala.plus.mobile.staging
+APP_NAME=Yoga Sala Plus [STG]
+FLUTTER_TARGET=lib/main_staging.dart
+APP_ICON_NAME=AppIcon
