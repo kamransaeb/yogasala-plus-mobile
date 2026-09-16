@@ -168,6 +168,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
       };
 
   Future<AppThemeStatus> _getSavedThemeStatus() async {
+    //return AppThemeStatus.light;
     final themeString = await _hiveStorage.read<String>(
       StorageConstants.themeMode,
       boxName: _box,

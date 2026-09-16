@@ -1,5 +1,5 @@
-import 'package:yogasala_plus_mobile/features/posts/domain/entities/post.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:yogasala_plus_mobile/features/posts/domain/entities/post.dart';
 
 part 'post_model.g.dart';
 
@@ -20,10 +20,13 @@ class PostModel {
 
   /// ID
   final int id;
+
   /// User ID
   final int userId;
+
   /// Title
   final String title;
+
   /// Body
   final String body;
 
@@ -32,9 +35,9 @@ class PostModel {
 
   /// To entity
   Post toEntity() => Post(
-      id: id,
-      userId: userId,
-      title: title,
-      body: body,
-    );
+    id: id,
+    userId: userId,
+    title: title,
+    body: body,
+  );
 }

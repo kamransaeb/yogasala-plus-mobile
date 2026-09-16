@@ -148,7 +148,7 @@ class ErrorMapper {
       // Payment failures
       case final PaymentDeclinedFailure f:
         return f.declineReason != null
-            ? 'Payment declined: ${f.declineReason}'
+            ? 'payment_declined_reason_error'.tr(args: [f.declineReason!])
             : 'payment_declined_error'.tr();
 
       case InsufficientFundsFailure _:
@@ -448,7 +448,7 @@ class ErrorMapper {
   ) {
     if (_isRetryable(failure)) {
       return SnackBarAction(
-        label: 'Retry',
+        label: 'retry'.tr(),
         onPressed: () {
           _trackErrorAction(failure, 'retry');
           onDismiss?.call();
@@ -670,7 +670,7 @@ class ErrorMapper {
 
   static String _getErrorDetails(Failure failure) {
     if (failure.code != null) {
-      return 'Error code: ${failure.code}';
+      return 'error_code'.tr(args: [failure.code!]);
     }
     return '';
   }
@@ -717,14 +717,17 @@ class ErrorMapper {
               ),
             if (isRetryable) ...[
               const SizedBox(height: 24),
-              ElevatedButton(onPressed: onRetry, child: const Text('Retry')),
+              ElevatedButton(
+                onPressed: onRetry,
+                child: Text('retry'.tr()),
+              ),
             ],
             if (_shouldShowSettingsButton(failure))
               Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: TextButton(
                   onPressed: () => _openAppSettings(failure),
-                  child: const Text('Open Settings'),
+                  child: Text('open_settings'.tr()),
                 ),
               ),
           ],
@@ -782,9 +785,9 @@ class ErrorMapper {
   static String _getSubMessage(Failure failure) {
     switch (failure) {
       case BatteryFailure _:
-        return 'Please charge your device to continue using this feature.';
+        return 'battery_tip'.tr();
       case StorageDeviceFailure _:
-        return 'Free up space and try again.';
+        return 'storage_tip'.tr();
       default:
         return '';
     }

@@ -2,13 +2,15 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
+import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth/auth_bloc.dart';
 
 /// Redirects guests away from protected routes and authed users away from login.
 class AuthGuard extends AutoRouteGuard {
+  /// The constructor for the auth guard.
   const AuthGuard({this.requiresAuth = true});
 
+  /// Whether the guard requires authentication.
   final bool requiresAuth;
 
   @override
@@ -36,18 +38,19 @@ class AuthGuard extends AutoRouteGuard {
     }
 
     if (requiresAuth) {
-      await router.push(
-        LoginRoute(
-          onResult: ({bool? success}) {
-            if (success == true) {
-              unawaited(
-                router.replace(resolver.route as PageRouteInfo<Object?>),
-              );
-            }
-          },
+      // Do NOT await push, and do NOT resolveNext(false) here.
+      unawaited(
+        router.push(
+          LoginRoute(
+            onResult: ({success}) {
+              // true  → continue to PostsDemo (or whatever was blocked)
+              // false → stay blocked / cancel
+              resolver.resolveNext(success == true);
+            },
+          ),
         ),
       );
-      resolver.resolveNext(false);
+      return;
     } else {
       await router.replace(const PostsDemoRoute());
       resolver.resolveNext(false);

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
@@ -67,47 +68,29 @@ class PermissionHelper {
 
   static String rationaleMessage(AppPermission type) {
     return switch (type) {
-      AppPermission.camera =>
-        'This app needs camera access to take photos and scan QR codes.',
-      AppPermission.photos =>
-        'This app needs photo library access to save and share images.',
-      AppPermission.location =>
-        'This app needs location access for location-based features.',
-      AppPermission.microphone =>
-        'This app needs microphone access for voice features.',
-      AppPermission.contacts =>
-        'This app needs contacts access to help you connect with others.',
-      AppPermission.calendar =>
-        'This app needs calendar access to sync events.',
-      AppPermission.reminders =>
-        'This app needs reminders access to manage reminders.',
-      AppPermission.notifications =>
-        'This app needs notification access to send important updates.',
-      AppPermission.storage =>
-        'This app needs storage access to save files.',
+      AppPermission.camera => 'permission_rationale_camera'.tr(),
+      AppPermission.photos => 'permission_rationale_photos'.tr(),
+      AppPermission.location => 'permission_rationale_location'.tr(),
+      AppPermission.microphone => 'permission_rationale_microphone'.tr(),
+      AppPermission.contacts => 'permission_rationale_contacts'.tr(),
+      AppPermission.calendar => 'permission_rationale_calendar'.tr(),
+      AppPermission.reminders => 'permission_rationale_reminders'.tr(),
+      AppPermission.notifications => 'permission_rationale_notifications'.tr(),
+      AppPermission.storage => 'permission_rationale_storage'.tr(),
     };
   }
 
   static String deniedMessage(AppPermission type) {
     return switch (type) {
-      AppPermission.camera =>
-        'Camera access is required. Please enable it in settings.',
-      AppPermission.photos =>
-        'Photo library access is required. Please enable it in settings.',
-      AppPermission.location =>
-        'Location access is required. Please enable it in settings.',
-      AppPermission.microphone =>
-        'Microphone access is required. Please enable it in settings.',
-      AppPermission.contacts =>
-        'Contacts access is required. Please enable it in settings.',
-      AppPermission.calendar =>
-        'Calendar access is required. Please enable it in settings.',
-      AppPermission.reminders =>
-        'Reminders access is required. Please enable it in settings.',
-      AppPermission.notifications =>
-        'Notification access is required. Please enable it in settings.',
-      AppPermission.storage =>
-        'Storage access is required. Please enable it in settings.',
+      AppPermission.camera => 'permission_denied_camera'.tr(),
+      AppPermission.photos => 'permission_denied_photos'.tr(),
+      AppPermission.location => 'permission_denied_location'.tr(),
+      AppPermission.microphone => 'permission_denied_microphone'.tr(),
+      AppPermission.contacts => 'permission_denied_contacts'.tr(),
+      AppPermission.calendar => 'permission_denied_calendar'.tr(),
+      AppPermission.reminders => 'permission_denied_reminders'.tr(),
+      AppPermission.notifications => 'permission_denied_notifications'.tr(),
+      AppPermission.storage => 'permission_denied_storage'.tr(),
     };
   }
 
@@ -125,7 +108,7 @@ class PermissionHelper {
 
     final status = await check(type);
     if (!context.mounted) return;
-    
+
     if (status.isDenied || status.isLimited) {
       final allowed = await _showRationaleDialog(context, type);
       if (!context.mounted) return;
@@ -155,16 +138,16 @@ class PermissionHelper {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Permission Required'),
+        title: Text('permission_required_title'.tr()),
         content: Text(rationaleMessage(type)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Not Now'),
+            child: Text('not_now'.tr()),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Continue'),
+            child: Text('continue'.tr()),
           ),
         ],
       ),
@@ -180,19 +163,19 @@ class PermissionHelper {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Permission Denied'),
+        title: Text('permission_denied_title'.tr()),
         content: Text(deniedMessage(type)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('cancel'.tr()),
           ),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(context);
               await openSettings();
             },
-            child: const Text('Open Settings'),
+            child: Text('open_settings'.tr()),
           ),
         ],
       ),

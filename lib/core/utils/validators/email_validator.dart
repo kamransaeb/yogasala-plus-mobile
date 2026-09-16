@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:formz/formz.dart';
 
 /// Validation error for email validator
 enum EmailValidationError {
   /// Invalid error
   invalid,
+
   /// Empty error
   empty,
 }
@@ -31,8 +33,8 @@ class Email extends FormzInput<String, EmailValidationError> {
   /// Get error message
   static String? getErrorMessage(EmailValidationError? error) {
     return switch (error) {
-      EmailValidationError.empty => 'Email is required',
-      EmailValidationError.invalid => 'Please enter a valid email address',
+      EmailValidationError.empty => 'email_required'.tr(),
+      EmailValidationError.invalid => 'email_invalid'.tr(),
       null => null,
     };
   }
