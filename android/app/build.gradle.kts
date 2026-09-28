@@ -9,9 +9,12 @@ plugins {
 
 android {
     namespace = "com.yogasala.plus.mobile"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37
+    // compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
-
+    buildFeatures {
+        resValues = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

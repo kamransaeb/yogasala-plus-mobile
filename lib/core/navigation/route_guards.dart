@@ -1,11 +1,17 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
-import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:yogasala_plus_mobile/di/injection.dart';
+import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth_bloc.dart';
 
-/// Redirects guests away from protected routes and authed users away from login.
+/// Redirects guests away from protected routes and authed users away from
+/// login.
+///
+/// Guards run only when a route is navigated to.
+/// AppDirectorRoute is unguarded and routes to Login or Profile after boot.
+/// Session loss while already on a protected page is handled by AppPage's
+/// global AuthBloc listener via `replaceAll([LoginRoute()])`.
 class AuthGuard extends AutoRouteGuard {
   /// The constructor for the auth guard.
   const AuthGuard({this.requiresAuth = true});
@@ -18,16 +24,16 @@ class AuthGuard extends AutoRouteGuard {
     NavigationResolver resolver,
     StackRouter router,
   ) async {
-    final context = router.navigatorKey.currentContext;
-    if (context == null) {
-      resolver.resolveNext(true);
-      return;
-    }
+    // Prefer GetIt over BuildContext so we never allow a protected route
+    // when the navigator context is not ready yet.
+    final authBloc = getIt<AuthBloc>();
 
-    final authBloc = context.read<AuthBloc>();
-
-    if (authBloc.state.isChecking) {
-      await authBloc.stream.firstWhere((state) => !state.isChecking);
+    // Ensure we have finished Firebase session restore before deciding.
+    if (!authBloc.state.hasAuthDecision) {
+      if (authBloc.state.maybeMap(initial: (_) => true, orElse: () => false)) {
+        authBloc.add(const AuthEvent.checkStatusRequested());
+      }
+      await authBloc.stream.firstWhere((state) => state.hasAuthDecision);
     }
 
     final isAuthenticated = authBloc.state.isAuthenticated;
@@ -43,7 +49,7 @@ class AuthGuard extends AutoRouteGuard {
         router.push(
           LoginRoute(
             onResult: ({success}) {
-              // true  → continue to PostsDemo (or whatever was blocked)
+              // true  → continue to the protected route
               // false → stay blocked / cancel
               resolver.resolveNext(success == true);
             },
@@ -52,7 +58,9 @@ class AuthGuard extends AutoRouteGuard {
       );
       return;
     } else {
-      await router.replace(const PostsDemoRoute());
+      // So a shared page (e.g. marketing, help, public post) should be an
+      // unguarded route.
+      await router.replace(const AppDirectorRoute());
       resolver.resolveNext(false);
     }
   }

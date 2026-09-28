@@ -43,11 +43,26 @@ class StorageConstants {
   /// Key indicating whether this is the first app launch.
   static const String isFirstLaunch = 'is_first_launch';
 
+  /// Key indicating the installed build is allowed (not force-update blocked).
+  static const String isAppUpdateOk = 'is_app_update_ok';
+
+  /// Cached remote app version string.
+  static const String remoteAppVersion = 'remote_app_version';
+
+  /// Cached remote build number.
+  static const String remoteBuildNumber = 'remote_build_number';
+
+  /// Cached EN store URL.
+  static const String storeUrlEn = 'store_url_en';
+
+  /// Cached TR store URL.
+  static const String storeUrlTr = 'store_url_tr';
+
   /// Key for dark mode preference.
   static const String isDarkMode = 'is_dark_mode';
-  
+
   /// Key for the selected UI language.
-  static const String selectedLanguage = 'selected_language';
+  static const String selectedLocale = 'selected_locale';
 
   /// Key for notification enabled preference.
   static const String notificationEnabled = 'notification_enabled';

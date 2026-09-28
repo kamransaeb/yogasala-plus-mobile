@@ -23,22 +23,22 @@ class AuthRepositoryImpl implements AuthRepository {
   final ErrorHandler _errorHandler;
 
   @override
-  Future<Either<Failure, AuthUser>> login({
+  Future<Either<Failure, AuthUser>> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
-      final response = await _remote.login(
+      final response = await _remote.logInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      await _local.cacheTokens(
+      await _local.cacheAuthTokens(
         response.authTokens,
       );
-      await _local.cacheUser(
-        response.user,
+      await _local.cacheAuthUser(
+        response.authUser,
       );
-      return Right(response.user.toEntity());
+      return Right(response.authUser.toEntity());
     } on Object catch (e, stackStrace) {
       return Left(_errorHandler.handleError(e, stackTrace: stackStrace));
     }
@@ -63,22 +63,16 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AuthTokens>> refreshTokens() async {
+  Future<Either<Failure, AuthTokens>> refreshAuthTokens() async {
     try {
-      final cached = await _local.getCachedTokens();
-      if (cached == null) {
-        return Left(
-          _errorHandler.handleError(
-            Exception('No refresh token'),
-            reason: 'refreshTokens',
-          ),
-        );
-      }
+      // *** Firebase refresh uses currentUser.getIdToken, cached refresh token
+      // is optional.
+      final cached = await _local.getCachedAuthTokens();
       final response = await _remote.refreshToken(
-        refreshToken: cached.refreshToken,
+        refreshToken: cached?.refreshToken ?? '',
       );
       final tokens = response.toAuthTokensModel();
-      await _local.cacheTokens(tokens);
+      await _local.cacheAuthTokens(tokens);
       return Right(tokens.toEntity());
     } on Object catch (e, stackTrace) {
       return Left(
@@ -92,19 +86,17 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AuthUser?>> getCurrentUser() async {
+  Future<Either<Failure, AuthUser?>> getCurrentAuthUser() async {
     try {
-      final cached = await _local.getCachedUser();
-      if (cached != null) return Right(cached.toEntity());
-      final remote = await _remote.currentUser();
-      await _local.cacheUser(remote);
+      final remote = await _remote.currentAuthUser();
+      await _local.cacheAuthUser(remote);
       return Right(remote.toEntity());
     } on Object catch (e, stackTrace) {
       return Left(
         _errorHandler.handleError(
           e,
           stackTrace: stackTrace,
-          reason: 'getCurrentUser',
+          reason: 'getCurrentAuthUser',
         ),
       );
     }
@@ -112,6 +104,60 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<bool> isAuthenticated() async {
-    return FirebaseAuth.instance.currentUser != null;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return false;
+
+    await user.reload();
+    final current = FirebaseAuth.instance.currentUser;
+    if (current == null || !current.emailVerified) {
+      try {
+        await _remote.logout();
+      } on Object catch (e, stackTrace) {
+        _errorHandler.handleError(
+          e,
+          stackTrace: stackTrace,
+          reason: 'isAuthenticated',
+        );
+      }
+      try {
+        await _local.clearSession();
+      } on Object catch (e, stackTrace) {
+        _errorHandler.handleError(
+          e,
+          stackTrace: stackTrace,
+          reason: 'isAuthenticated',
+        );
+      }
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future<Either<Failure, void>> sendPasswordResetEmail({
+    required String email,
+  }) async {
+    try {
+      await _remote.sendPasswordResetEmail(email: email);
+      return const Right(null);
+    } on Object catch (e, stackTrace) {
+      return Left(_errorHandler.handleError(e, stackTrace: stackTrace));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> signUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _remote.signUpWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return const Right(null);
+    } on Object catch (e, stackTrace) {
+      return Left(_errorHandler.handleError(e, stackTrace: stackTrace));
+    }
   }
 }

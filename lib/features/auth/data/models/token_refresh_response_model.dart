@@ -1,6 +1,6 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/models/auth_tokens_model.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_tokens.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'token_refresh_response_model.freezed.dart';
 part 'token_refresh_response_model.g.dart';
@@ -30,7 +30,7 @@ abstract class TokenRefreshResponseModel with _$TokenRefreshResponseModel {
   );
 
   /// Converts the [TokenRefreshResponseModel] to an [AuthTokens].
-  AuthTokens toAuthTokensEntity() => AuthTokens(
+  AuthTokens toEntity() => AuthTokens(
     accessToken: accessToken,
     refreshToken: refreshToken,
     expiresAt: expiresAt,

@@ -17,6 +17,17 @@ class ErrorMapper {
 
   /// Convert failure to user-friendly message
   static String toUserMessage(Failure failure) {
+    final backendCode = _resolveBackendErrorCode(failure);
+    if (backendCode != null) {
+      final translated = _mapBackendErrorCode(backendCode);
+      // Prefer localized copy; otherwise show RFC 7807 detail / failure message.
+      if (translated != backendCode) return translated;
+      if (failure.message.isNotEmpty && failure.message != backendCode) {
+        return failure.message;
+      }
+      return translated;
+    }
+
     // Map failure types to user messages
     switch (failure) {
       // Network failures (subtypes before NetworkFailure)
@@ -100,12 +111,28 @@ class ErrorMapper {
       case final DisplayFailure f:
         return _mapDisplayFailure(f);
 
+      // API failures (400 / 401 / 500 with unknown error codes → backend message)
+      case final BadRequestFailure f:
+        return f.message;
+      case final UnauthorizedRequestFailure f:
+        return f.message;
+      case InternalServerErrorFailure _:
+        // Prefer localized copy; raw bodies are often Java stack / NPE text.
+        return 'server_error'.tr();
+      case final ApiFailure f:
+        return f.message;
+
       // Server failures
       case final ServerFailure f:
         return _mapServerFailure(f);
 
       // Authentication failures
-      case UnauthorizedAccessFailure _:
+      case final UnauthorizedAccessFailure f:
+        // Prefer localized message key from the failure (e.g. user_not_authenticated).
+        if (f.message.isNotEmpty) {
+          final translated = f.message.tr();
+          if (translated != f.message) return translated;
+        }
         return 'unauthorized_error'.tr();
 
       case InvalidCredentialsFailure _:
@@ -169,6 +196,13 @@ class ErrorMapper {
         return 'service_unavailable_error'.tr();
 
       // Unknown failure
+      case final UnknownFailure f:
+        if (f.message.isNotEmpty) {
+          final translated = f.message.tr();
+          if (translated != f.message) return translated;
+        }
+        return 'unknown_error'.tr();
+
       default:
         return 'unknown_error'.tr();
     }
@@ -202,6 +236,64 @@ class ErrorMapper {
       return 'server_error'.tr();
     }
     return failure.message;
+  }
+
+  /// Resolves backend problem codes from RFC 7807 / API response bodies only.
+  ///
+  /// Client failure codes (e.g. `NO_INTERNET_CONNECTION`) are ignored so the
+  /// typed [toUserMessage] switch can localize them via keys like
+  /// `no_internet_error`.
+  static String? _resolveBackendErrorCode(Failure failure) {
+    if (failure is ApiFailure) {
+      return _backendErrorCode(failure.responseData) ??
+          _backendErrorCode(failure.details);
+    }
+    if (failure is HttpStatusFailure) {
+      return _backendErrorCode(failure.responseData) ??
+          _backendErrorCode(failure.details);
+    }
+    return null;
+  }
+
+  /// RFC 7807 `code`, legacy `error`, or slug from `type` URI.
+  static String? _backendErrorCode(dynamic responseData) {
+    if (responseData is! Map) return null;
+
+    final code = responseData['code'] ?? responseData['error_code'];
+    if (code is String && code.isNotEmpty) return code;
+
+    final error = responseData['error'];
+    if (error is String && error.isNotEmpty && !error.contains(' ')) {
+      return error;
+    }
+
+    final type = responseData['type'];
+    if (type is String && type.isNotEmpty) {
+      final segment = Uri.tryParse(type)?.pathSegments.lastOrNull;
+      if (segment != null && segment.isNotEmpty) {
+        return segment.replaceAll('-', '_');
+      }
+    }
+    return null;
+  }
+
+  /// Maps backend `code` → same-named localization key
+  /// (e.g. `missing_tenant_id`).
+  ///
+  /// Keys in `en.json` / `tr.json` are case-sensitive, so we try the raw
+  /// code then lower/upper variants (backend may send `MISSING_TENANT_ID`).
+  static String _mapBackendErrorCode(String code) {
+    final candidates = <String>[
+      code,
+      if (code != code.toLowerCase()) code.toLowerCase(),
+      if (code != code.toUpperCase()) code.toUpperCase(),
+    ];
+    for (final key in candidates) {
+      final translated = key.tr();
+      // easy_localization returns the key when missing.
+      if (translated != key) return translated;
+    }
+    return code;
   }
 
   // ===========================================================================
@@ -535,7 +627,7 @@ class ErrorMapper {
               onPressed: () {
                 Navigator.pop(dialogContext);
                 _trackErrorAction(failure, 'open_settings');
-                 unawaited(_openAppSettings(failure));
+                unawaited(_openAppSettings(failure));
               },
               child: Text('open_settings'.tr()),
             ),

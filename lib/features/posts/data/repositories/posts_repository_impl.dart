@@ -1,9 +1,9 @@
-import 'package:yogasala_plus_mobile/features/posts/data/datasources/posts_remote_data_source.dart';
-import 'package:yogasala_plus_mobile/features/posts/domain/entities/post.dart';
-import 'package:yogasala_plus_mobile/features/posts/domain/repositories/posts_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:enterprise_core/enterprise_core.dart';
 import 'package:injectable/injectable.dart';
+import 'package:yogasala_plus_mobile/features/posts/data/datasources/posts_remote_data_source.dart';
+import 'package:yogasala_plus_mobile/features/posts/domain/entities/post.dart';
+import 'package:yogasala_plus_mobile/features/posts/domain/repositories/posts_repository.dart';
 
 /// Implementation of the PostsRepository interface
 @LazySingleton(as: PostsRepository)

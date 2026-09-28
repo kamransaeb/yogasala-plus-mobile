@@ -6,7 +6,7 @@ import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
 import 'package:yogasala_plus_mobile/core/constants/storage_constants.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/models/auth_tokens_model.dart';
-import 'package:yogasala_plus_mobile/features/auth/data/models/user_model.dart';
+import 'package:yogasala_plus_mobile/features/auth/data/models/auth_user_model.dart';
 
 /// The implementation of the [AuthLocalDataSource].
 @LazySingleton(as: AuthLocalDataSource)
@@ -19,27 +19,27 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   final LocalStorage _secureStorage;
 
   @override
-  Future<void> cacheTokens(AuthTokensModel tokens) async {
+  Future<void> cacheAuthTokens(AuthTokensModel authTokens) async {
     await _secureStorage.write(
       StorageConstants.accessToken,
-      tokens.accessToken,
+      authTokens.accessToken,
     );
     await _secureStorage.write(
       StorageConstants.refreshToken,
-      tokens.refreshToken,
+      authTokens.refreshToken,
     );
     await _secureStorage.write(
       StorageConstants.tokenExpiresAt,
-      tokens.expiresAt.toIso8601String(),
+      authTokens.expiresAt.toIso8601String(),
     );
     await _secureStorage.write(
       StorageConstants.tokensKey,
-      jsonEncode(tokens.toJson()),
+      jsonEncode(authTokens.toJson()),
     );
   }
 
   @override
-  Future<AuthTokensModel?> getCachedTokens() async {
+  Future<AuthTokensModel?> getCachedAuthTokens() async {
     final raw = await _secureStorage.read<String>(StorageConstants.tokensKey);
     if (raw == null || raw.isEmpty) {
       // Fallback to individual keys if bundle missing
@@ -65,7 +65,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
 
   @override
-  Future<void> clearCachedTokens() async {
+  Future<void> clearCachedAuthTokens() async {
     await _secureStorage.delete(StorageConstants.accessToken);
     await _secureStorage.delete(StorageConstants.refreshToken);
     await _secureStorage.delete(StorageConstants.tokenExpiresAt);
@@ -73,29 +73,29 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
 
   @override
-  Future<void> cacheUser(UserModel user) async {
+  Future<void> cacheAuthUser(AuthUserModel authUserModel) async {
     await _secureStorage.write(
       StorageConstants.userKey,
-      jsonEncode(user.toJson()),
+      jsonEncode(authUserModel.toJson()),
     );
   }
 
   @override
-  Future<UserModel?> getCachedUser() async {
+  Future<AuthUserModel?> getCachedAuthUser() async {
     final raw = await _secureStorage.read<String>(StorageConstants.userKey);
     if (raw == null || raw.isEmpty) return null;
-    return UserModel.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    return AuthUserModel.fromJson(jsonDecode(raw) as Map<String, dynamic>);
   }
 
   @override
-  Future<void> clearCachedUser() async {
+  Future<void> clearCachedAuthUser() async {
     await _secureStorage.delete(StorageConstants.userKey);
   }
 
   @override
   Future<void> clearSession() async {
-    await clearCachedTokens();
-    await clearCachedUser();
+    await clearCachedAuthTokens();
+    await clearCachedAuthUser();
     await _secureStorage.delete(StorageConstants.sessionActive);
   }
 }

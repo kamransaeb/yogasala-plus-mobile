@@ -1,9 +1,9 @@
-import 'package:yogasala_plus_mobile/features/posts/domain/entities/post.dart';
-import 'package:yogasala_plus_mobile/features/posts/domain/repositories/posts_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:enterprise_core/enterprise_core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
+import 'package:yogasala_plus_mobile/features/posts/domain/entities/post.dart';
+import 'package:yogasala_plus_mobile/features/posts/domain/repositories/posts_repository.dart';
 
 /// Fetches a single post by id.
 @injectable

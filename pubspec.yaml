@@ -42,27 +42,27 @@ dependencies:
     git:
       url: https://github.com/kamransaeb/flutter_enterprise_packages.git
       path: packages/enterprise_core
-      ref: v0.1.1
+      ref: v0.1.10
   enterprise_logger:
     git:
       url: https://github.com/kamransaeb/flutter_enterprise_packages.git
       path: packages/enterprise_logger
-      ref: v0.1.1
+      ref: v0.1.10
   enterprise_network:
     git:
       url: https://github.com/kamransaeb/flutter_enterprise_packages.git
       path: packages/enterprise_network
-      ref: v0.1.1
+      ref: v0.1.10
   enterprise_storage:
     git:
       url: https://github.com/kamransaeb/flutter_enterprise_packages.git
       path: packages/enterprise_storage
-      ref: v0.1.1
+      ref: v0.1.10
   enterprise_ui:
     git:
       url: https://github.com/kamransaeb/flutter_enterprise_packages.git
       path: packages/enterprise_ui
-      ref: v0.1.5
+      ref: v0.1.10
   equatable: ^2.1.0
   firebase_auth: ^6.6.1
   firebase_core: ^4.14.0
@@ -71,17 +71,21 @@ dependencies:
   flutter_bloc: ^9.1.1
   flutter_dotenv: ^6.0.1
   flutter_secure_storage: ^10.3.1
+  flutter_snake_navigationbar: ^0.6.1
   flutter_svg: 2.3.0
   formz: ^0.8.0
   freezed_annotation: ^3.1.0
   get_it: ^9.2.1
   hive: ^2.2.3
+  image_picker: ^1.2.3
   injectable: ^3.0.0
   internet_connection_checker_plus: ^3.1.1
   json_annotation: ^4.12.0
+  package_info_plus: ^10.2.1
   permission_handler: ^13.0.0
   retrofit: ^4.9.2
   shared_preferences: ^2.5.5
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   auto_route_generator: ^10.6.0
@@ -93,6 +97,20 @@ dev_dependencies:
   json_serializable: ^6.14.1
   retrofit_generator: ^10.2.8
   very_good_analysis: ^10.0.0
+
+# Local enterprise packages (until a new git tag is published).
+dependency_overrides:
+  enterprise_core:
+    git:
+      url: https://github.com/kamransaeb/flutter_enterprise_packages.git
+      path: packages/enterprise_core
+      ref: v0.1.10
+  enterprise_network:    
+    git:
+      url: https://github.com/kamransaeb/flutter_enterprise_packages.git
+      path: packages/enterprise_network
+      ref: v0.1.10
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

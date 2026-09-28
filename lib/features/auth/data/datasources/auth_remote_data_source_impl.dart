@@ -1,10 +1,12 @@
+import 'package:enterprise_core/enterprise_core.dart'
+    hide FirebaseAuthException;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/models/auth_tokens_model.dart';
-import 'package:yogasala_plus_mobile/features/auth/data/models/login_response_model.dart';
+import 'package:yogasala_plus_mobile/features/auth/data/models/auth_user_model.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/models/token_refresh_response_model.dart';
-import 'package:yogasala_plus_mobile/features/auth/data/models/user_model.dart';
+import 'package:yogasala_plus_mobile/features/login/data/models/login_response_model.dart';
 
 /// The implementation of the [AuthRemoteDataSource].
 @LazySingleton(as: AuthRemoteDataSource)
@@ -17,7 +19,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth _firebaseAuth;
 
   @override
-  Future<LoginResponseModel> login({
+  Future<LoginResponseModel> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -32,11 +34,34 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         message: 'No user returned from Firebase',
       );
     }
-    final tokens = await _tokensFromUser(user);
+    final verifiedUser = await _requireVerifiedEmail(user);
+    final tokens = await _tokensFromUser(verifiedUser);
     return LoginResponseModel(
-      user: _mapUser(user),
+      authUser: _mapUser(verifiedUser),
       authTokens: tokens,
     );
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail({
+    required String email,
+  }) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
+  }
+
+  @override
+  Future<void> signUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    if (userCredential.user != null) {
+      await userCredential.user!.sendEmailVerification();
+      await _firebaseAuth.signOut();
+    }
   }
 
   @override
@@ -55,19 +80,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         message: 'No current user to refresh',
       );
     }
-    final token = await user.getIdToken(true);
-    final result = await user.getIdTokenResult(true);
+    final verifiedUser = await _requireVerifiedEmail(user);
+    final accessToken = await verifiedUser.getIdToken(true) ?? '';
+    final result = await verifiedUser.getIdTokenResult(true);
     final expiresAt =
         result.expirationTime ?? DateTime.now().add(const Duration(hours: 1));
     return TokenRefreshResponseModel(
-      accessToken: token ?? '',
-      refreshToken: refreshToken,
+      accessToken: accessToken,
+      refreshToken: refreshToken.isNotEmpty ? refreshToken : accessToken,
       expiresAt: expiresAt,
     );
   }
 
   @override
-  Future<UserModel> currentUser() async {
+  Future<AuthUserModel> currentAuthUser() async {
     final user = _firebaseAuth.currentUser;
     if (user == null) {
       throw FirebaseAuthException(
@@ -75,7 +101,25 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         message: 'No current user',
       );
     }
-    return _mapUser(user);
+    final verifiedUser = await _requireVerifiedEmail(user);
+    return _mapUser(verifiedUser);
+  }
+
+  /// Reloads [user], requires [User.emailVerified], otherwise signs out.
+  Future<User> _requireVerifiedEmail(User user) async {
+    await user.reload();
+    final refreshed = _firebaseAuth.currentUser;
+    if (refreshed == null) {
+      throw FirebaseAuthException(
+        code: 'user-not-found',
+        message: 'No current user',
+      );
+    }
+    if (!refreshed.emailVerified) {
+      await _firebaseAuth.signOut();
+      throw const EmailNotVerifiedException();
+    }
+    return refreshed;
   }
 
   Future<AuthTokensModel> _tokensFromUser(User user) async {
@@ -91,9 +135,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
   }
 
-  UserModel _mapUser(User user) {
+  AuthUserModel _mapUser(User user) {
     final parts = (user.displayName ?? '').trim().split(RegExp(r'\s+'));
-    return UserModel(
+    return AuthUserModel(
       id: user.uid,
       email: user.email ?? '',
       firstName: parts.isNotEmpty && parts.first.isNotEmpty

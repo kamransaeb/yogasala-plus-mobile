@@ -1,7 +1,7 @@
-import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
-import 'package:yogasala_plus_mobile/di/injection.dart';
 import 'package:enterprise_network/enterprise_network.dart';
 import 'package:enterprise_storage/enterprise_storage.dart';
+import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
+import 'package:yogasala_plus_mobile/di/injection.dart';
 
 /// Initializes the app services.
 Future<void> initializeAppServices() async {
@@ -14,7 +14,7 @@ Future<void> initializeAppServices() async {
   );
 
   await getIt<DeviceNetworkInfo>().initialize();
-  
+
   await prefs.initialize();
   await secureStorage.initialize();
   await hiveStorage.initialize();

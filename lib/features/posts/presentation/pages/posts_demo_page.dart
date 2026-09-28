@@ -11,7 +11,7 @@ import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
 import 'package:yogasala_plus_mobile/core/theme/theme_bloc.dart';
 import 'package:yogasala_plus_mobile/di/injection.dart';
 import 'package:yogasala_plus_mobile/errors/error_mapper.dart';
-import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:yogasala_plus_mobile/features/posts/presentation/bloc/posts_bloc.dart';
 
 /// The posts demo page widget.
@@ -37,8 +37,8 @@ class _PostsDemoView extends StatelessWidget {
     return BlocListener<AuthBloc, AuthState>(
       listenWhen: (previous, current) =>
           previous != current &&
-          current.maybeWhen(
-            unauthenticated: () => true,
+          current.maybeMap(
+            unauthenticated: (_) => true,
             orElse: () => false,
           ),
       listener: (context, state) {
@@ -62,7 +62,9 @@ class _PostsDemoView extends StatelessWidget {
               tooltip: 'logout'.tr(),
               icon: const Icon(Icons.logout),
               onPressed: () {
-                context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
+                context.read<AuthBloc>().add(
+                  const AuthEvent.logoutRequested(),
+                );
               },
             ),
           ],
@@ -113,10 +115,6 @@ class _PostsDemoView extends StatelessWidget {
         ),
         floatingActionButton: BlocBuilder<PostsBloc, PostsState>(
           builder: (context, state) {
-            final loading = state.maybeWhen(
-              loading: () => true,
-              orElse: () => false,
-            );
             return Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,

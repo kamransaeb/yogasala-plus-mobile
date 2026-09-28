@@ -13,7 +13,7 @@ abstract class AuthTokensModel with _$AuthTokensModel {
     @JsonKey(name: 'expires_at') required DateTime expiresAt,
   }) = _AuthTokensModel;
 
-  // Without this, the freezed library will not generate the instance methods 
+  // Without this, the freezed library will not generate the instance methods
   // like fromJson and toJson and toEntity.
   // This is a required part of the freezed library.
   // The abstract class has no fields,
@@ -26,8 +26,8 @@ abstract class AuthTokensModel with _$AuthTokensModel {
 
   /// Converts the [AuthTokensModel] to an [AuthTokens].
   AuthTokens toEntity() => AuthTokens(
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        expiresAt: expiresAt,
-      );
+    accessToken: accessToken,
+    refreshToken: refreshToken,
+    expiresAt: expiresAt,
+  );
 }

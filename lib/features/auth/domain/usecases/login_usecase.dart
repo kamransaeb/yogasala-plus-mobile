@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_user.dart';
-import 'package:yogasala_plus_mobile/features/auth/domain/repositories/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:enterprise_core/enterprise_core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
+import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_user.dart';
+import 'package:yogasala_plus_mobile/features/auth/domain/repositories/auth_repository.dart';
 
 /// Use case for logging in a user.
 @injectable
@@ -18,12 +18,11 @@ class LoginUseCase implements BaseUseCase<AuthUser, LoginParams> {
 
   @override
   FutureOr<Either<Failure, AuthUser>> call(LoginParams params) {
-    return _authRepository.login(
+    return _authRepository.logInWithEmailAndPassword(
       email: params.email,
       password: params.password,
     );
   }
-  
 }
 
 /// Parameters for the login use case.

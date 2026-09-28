@@ -21,19 +21,19 @@ abstract final class AppColors {
   static const Color black = Color(0xFF000000);
 
   /// Surface container lowest color
-  static const Color surfaceContainerLowest = Color(0xFF121212);
+  static const Color black1 = Color(0xFF121212);
 
   /// Surface container low color
-  static const Color surfaceContainerLow = Color(0xFF1E1E1E);
+  static const Color black2 = Color(0xFF1E1E1E);
 
   /// Surface container color
-  static const Color surfaceContainer = Color(0xFF1E1E1E);
+  static const Color black3 = Color(0xFF1E1E1E);
 
   /// Surface container high color
-  static const Color surfaceContainerHigh = Color(0xFF2C2C2C);
+  static const Color black4 = Color(0xFF2C2C2C);
 
   /// Surface container highest color
-  static const Color surfaceContainerHighest = Color(0xFF2C2C2C);
+  static const Color black5 = Color(0xFF3A3A3A);
 
   /// Grey Apple color
   static const Color greyApple = Color(0xFF2F2F2F);

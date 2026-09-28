@@ -1,7 +1,7 @@
+import 'package:injectable/injectable.dart';
 import 'package:yogasala_plus_mobile/features/posts/data/api/posts_api_client.dart';
 import 'package:yogasala_plus_mobile/features/posts/data/datasources/posts_remote_data_source.dart';
 import 'package:yogasala_plus_mobile/features/posts/data/models/post_model.dart';
-import 'package:injectable/injectable.dart';
 
 /// Implementation of the PostsRemoteDataSource interface
 @LazySingleton(as: PostsRemoteDataSource)

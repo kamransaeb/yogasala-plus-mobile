@@ -3,12 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:yogasala_plus_mobile/app/app_config.dart';
-import 'package:yogasala_plus_mobile/app/app_main.dart';
 import 'package:yogasala_plus_mobile/bootstrap/initialize_app_services.dart';
 import 'package:yogasala_plus_mobile/core/theme/theme_bloc.dart';
 import 'package:yogasala_plus_mobile/di/injection.dart';
-import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:yogasala_plus_mobile/features/app/app_config.dart';
+import 'package:yogasala_plus_mobile/features/app/presentation/bloc/app_bloc.dart';
+import 'package:yogasala_plus_mobile/features/app/presentation/pages/app_page.dart';
+import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth_bloc.dart';
 
 /// Bootstrap is the bootstrap class for the app
 class Bootstrap {
@@ -42,12 +43,10 @@ class Bootstrap {
         child: MultiBlocProvider(
           providers: [
             BlocProvider.value(value: getIt<ThemeBloc>()),
-            BlocProvider.value(
-              value: getIt<AuthBloc>()
-                ..add(const AuthEvent.checkStatusRequested()),
-            ),
+            BlocProvider.value(value: getIt<AppBloc>()),
+            BlocProvider.value(value: getIt<AuthBloc>()),
           ],
-          child: const AppMain(),
+          child: const AppPage(),
         ),
       ),
     );

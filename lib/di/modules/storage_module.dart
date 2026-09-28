@@ -1,10 +1,10 @@
-import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
-import 'package:yogasala_plus_mobile/core/constants/storage_constants.dart';
 import 'package:enterprise_logger/enterprise_logger.dart';
 import 'package:enterprise_storage/enterprise_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
+import 'package:yogasala_plus_mobile/core/constants/storage_constants.dart';
 
 /// Storage module for local storage
 @module
@@ -33,7 +33,7 @@ abstract class StorageModule {
   // ===========================================================================
   // Secure storage
   // ===========================================================================
-/// Shared preferences storage for local storage
+  /// Shared preferences storage for local storage
   @singleton
   FlutterSecureStorage get flutterSecureStorage => const FlutterSecureStorage(
     // aOptions: AndroidOptions(),
@@ -42,7 +42,7 @@ abstract class StorageModule {
     ),
   );
 
-/// Secure storage for local storage
+  /// Secure storage for local storage
   @singleton
   @Named(DiConstants.secureStorage)
   LocalStorage secureStorage(

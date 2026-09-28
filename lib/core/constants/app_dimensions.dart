@@ -23,8 +23,11 @@ class AppDimensions {
   /// Circular progress indicator stroke width.
   static const circularProgressIndicatorStrokeWidth = 2.0;
 
-  /// Border radius.
-  static const borderRadius = 30.0;
+  /// Shared corner radius for surfaces, buttons, and fields.
+  static const borderRadius = 12.0;
+
+  /// Text field border radius.
+  static const textFieldBorderRadius = 12.0;
 
   /// Circular border radius.
   static const circularBorderRadius = 50.0;

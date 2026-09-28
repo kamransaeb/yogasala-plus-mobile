@@ -22,7 +22,7 @@ enum AppThemeStatus {
   IconData get icon => switch (this) {
     light => Icons.light_mode,
     dark => Icons.dark_mode,
-    system => Icons.settings,
+    system => Icons.brightness_auto,
   };
 
   /// Returns the [ThemeMode] for the current status.
