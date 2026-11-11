@@ -1,0 +1,33 @@
+---
+description: RevenueCat subscriptions, entitlements gating, and Zoom joinUrl live sessions
+globs: lib/features/subscriptions/**/*.dart,lib/features/live_sessions/**/*.dart,lib/features/live_videos/**/*.dart
+alwaysApply: false
+---
+
+# Subscriptions & live sessions
+
+## Plans → entitlements
+
+| Plan (wire) | Entitlements |
+|-------------|--------------|
+| STANDARD `0` | VIDEO `0` |
+| PREMIUM `1` | VIDEO + LIVE |
+
+- Gate VOD with `hasVideo` (free series may still play)
+- Gate Live Join with `hasLive`; otherwise paywall PREMIUM — do not call join
+
+## RevenueCat
+
+- Purchases on device via `purchases_flutter`
+- After login / purchase / restore → refresh `GET /mobile/user/entitlements`
+- Do **not** call a purchase-complete API; webhook syncs the backend
+- Package/product ids should contain `STANDARD` or `PREMIUM`
+
+## Live join
+
+- Browse: `GET /mobile/user/live-sessions` (no LIVE required)
+- Join: `POST .../{slotId}/join?occurrenceStart=<exact startsAtRaw>`
+- Response has `joinUrl` only → `url_launcher` external launch
+- **Never** invent Zoom SDK / `meetingId` / passcode flows
+- Join window UX: 30 min before start → 15 min after end
+- Map `live_access_required`, `invalid_live_occurrence`, `invalid_live_week_slot_id`

@@ -8,10 +8,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:yogasala_plus_mobile/core/constants/app_assets_icons.dart';
+import 'package:yogasala_plus_mobile/core/constants/app_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_dimensions.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_spacing.dart';
 import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
+import 'package:yogasala_plus_mobile/core/widgets/feedback/app_flushbar.dart';
 import 'package:yogasala_plus_mobile/core/widgets/svg_icon.dart';
 import 'package:yogasala_plus_mobile/features/onboarding/presentation/bloc/onboarding_profile_photo/onboarding_profile_photo_bloc.dart';
 import 'package:yogasala_plus_mobile/features/onboarding/presentation/widgets/onboarding_header.dart';
@@ -23,24 +24,35 @@ class OnboardingProfilePhotoForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<
-      OnboardingProfilePhotoBloc,
-      OnboardingProfilePhotoState
-    >(
-      listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          current.status == FormzSubmissionStatus.success,
-      listener: (context, state) {
-        final user = state.user;
-        if (user == null) return;
-        unawaited(
-          context.router.push(
-            OnboardingAgreementsRoute(userYogaSalaPlus: user),
-          ),
-        );
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<OnboardingProfilePhotoBloc, OnboardingProfilePhotoState>(
+          listenWhen: (previous, current) =>
+              previous.status != current.status &&
+              current.status == FormzSubmissionStatus.success,
+          listener: (context, state) {
+            final user = state.user;
+            if (user == null) return;
+            unawaited(
+              context.router.push(
+                OnboardingAgreementsRoute(userYogaSalaPlus: user),
+              ),
+            );
+          },
+        ),
+        BlocListener<OnboardingProfilePhotoBloc, OnboardingProfilePhotoState>(
+          listenWhen: (previous, current) =>
+              previous.status != current.status &&
+              current.status == FormzSubmissionStatus.failure,
+          listener: (context, state) {
+            final failure = state.failure;
+            if (failure == null) return;
+            AppFlushbar.showFailure(context, failure);
+          },
+        ),
+      ],
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           OnboardingHeader(
             percent: 4 / 5,
@@ -76,40 +88,24 @@ class _AvatarPreview extends StatelessWidget {
     final bytes = context.select<OnboardingProfilePhotoBloc, Uint8List?>(
       (bloc) => bloc.state.imageBytes,
     );
+    final backgroundImage = bytes != null ? MemoryImage(bytes) : null;
 
     return InkWell(
       onTap: () => _showImageSheet(context),
       borderRadius: BorderRadius.circular(
         AppDimensions.fullCircularBorderRadius,
       ),
-      child: SizedBox(
-        width: AppDimensions.largeAvatarSize,
-        height: AppDimensions.largeAvatarSize,
-        child: bytes != null
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  AppDimensions.fullCircularBorderRadius,
-                ),
-                child: Image(image: MemoryImage(bytes), fit: BoxFit.cover),
+      child: CircleAvatar(
+        radius: AppDimensions.profileAvatarSizeLarge,
+        backgroundColor: theme.colorScheme.surfaceContainerHighest,
+        backgroundImage: backgroundImage,
+        child: backgroundImage == null
+            ? SvgIcon(
+                asset: AppIcons.emptyAvatar,
+                color: theme.colorScheme.outline,
+                size: AppDimensions.iconSizeExtraLarge,
               )
-            : Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    AppDimensions.fullCircularBorderRadius,
-                  ),
-                  border: Border.all(
-                    color: theme.colorScheme.outline,
-                    width: AppDimensions.borderLineWidth,
-                  ),
-                ),
-                child: Center(
-                  child: SvgIcon(
-                    asset: AppAssetsIcons.emptyAvatar,
-                    color: theme.colorScheme.outline,
-                    size: AppDimensions.iconSizeExtraLarge,
-                  ),
-                ),
-              ),
+            : null,
       ),
     );
   }
@@ -125,9 +121,10 @@ class _EditImageButton extends StatelessWidget {
       (bloc) => bloc.state.imageBytes != null,
     );
 
-    return TextButton(
+    return AppButton(
+      variant: AppButtonVariant.text,
+      label: hasImage ? 'edit_image'.tr() : 'add_image'.tr(),
       onPressed: () => _showImageSheet(context),
-      child: Text(hasImage ? 'edit_image'.tr() : 'add_image'.tr()),
     );
   }
 }
@@ -139,7 +136,7 @@ Future<void> _showImageSheet(BuildContext context) async {
     builder: (sheetContext) {
       return Padding(
         padding: const EdgeInsets.all(
-          AppDimensions.pagePadding,
+          AppDimensions.p24,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -147,7 +144,7 @@ Future<void> _showImageSheet(BuildContext context) async {
             FractionallySizedBox(
               widthFactor: 0.3,
               child: Container(
-                height: AppDimensions.pagePadding / 5,
+                height: AppDimensions.p24 / 5,
                 decoration: BoxDecoration(
                   color: CupertinoDynamicColor.resolve(
                     CupertinoColors.tertiarySystemFill,
@@ -162,7 +159,7 @@ Future<void> _showImageSheet(BuildContext context) async {
             AppSpacing.verticalSpacing8,
             ListTile(
               leading: const SvgIcon(
-                asset: AppAssetsIcons.camera,
+                asset: AppIcons.camera,
                 size: AppDimensions.iconSizeLarge,
               ),
               title: Text('camera'.tr()),
@@ -174,7 +171,7 @@ Future<void> _showImageSheet(BuildContext context) async {
 
             ListTile(
               leading: const SvgIcon(
-                asset: AppAssetsIcons.gallery,
+                asset: AppIcons.gallery,
                 size: AppDimensions.iconSizeLarge,
               ),
               title: Text('gallery'.tr()),
@@ -185,7 +182,7 @@ Future<void> _showImageSheet(BuildContext context) async {
             ),
             ListTile(
               leading: const SvgIcon(
-                asset: AppAssetsIcons.delete,
+                asset: AppIcons.delete,
                 size: AppDimensions.iconSizeLarge,
               ),
 
@@ -217,7 +214,7 @@ class _NextButton extends StatelessWidget {
       return const SafeArea(
         top: false,
         child: Padding(
-          padding: EdgeInsets.only(bottom: AppDimensions.pagePadding),
+          padding: EdgeInsets.only(bottom: AppDimensions.p24),
           child: AppLoadingIndicator(),
         ),
       );
@@ -226,7 +223,7 @@ class _NextButton extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: AppDimensions.pagePadding),
+        padding: const EdgeInsets.only(bottom: AppDimensions.p24),
         child: AppButton(
           size: AppButtonSize.large,
           label: 'next'.tr(),

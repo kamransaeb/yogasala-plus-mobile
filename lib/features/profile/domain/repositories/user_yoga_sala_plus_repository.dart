@@ -5,8 +5,7 @@ import 'package:yogasala_plus_mobile/features/profile/domain/entities/user_yoga_
 /// Repository for user yoga sala plus.
 abstract class UserYogaSalaPlusRepository {
   /// Get or create user yoga sala plus open mobile.
-  Future<Either<Failure, UserYogaSalaPlus>>
-  getOrCreateUserYogaSalaPlusOpenMobile();
+  Future<Either<Failure, UserYogaSalaPlus>> getOrCreateUserYogaSalaPlus();
 
   /// Complete user yoga sala plus mobile user.
   Future<Either<Failure, UserYogaSalaPlus>> completeUserYogaSalaPlusMobileUser(
@@ -20,4 +19,9 @@ abstract class UserYogaSalaPlusRepository {
 
   /// Get user yoga sala plus mobile user.
   Future<Either<Failure, UserYogaSalaPlus>> getUserYogaSalaPlusMobileUser();
+
+  /// Update user IANA time zone.
+  Future<Either<Failure, UserYogaSalaPlus>> updateUserTimeZone(
+    String timeZone,
+  );
 }

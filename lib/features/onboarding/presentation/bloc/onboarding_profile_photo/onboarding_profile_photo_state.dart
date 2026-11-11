@@ -8,5 +8,6 @@ abstract class OnboardingProfilePhotoState with _$OnboardingProfilePhotoState {
     UserYogaSalaPlus? user,
     Uint8List? imageBytes,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
+    Failure? failure,
   }) = _OnboardingProfilePhotoState;
 }

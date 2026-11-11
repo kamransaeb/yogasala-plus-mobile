@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:yogasala_plus_mobile/features/auth/data/models/auth_user_model.dart';
 import 'package:yogasala_plus_mobile/features/auth/data/models/auth_tokens_model.dart';
+import 'package:yogasala_plus_mobile/features/auth/data/models/auth_user_model.dart';
 
 part 'login_response_model.freezed.dart';
 part 'login_response_model.g.dart';

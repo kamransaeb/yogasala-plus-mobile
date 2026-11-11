@@ -11,10 +11,13 @@ import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
 import 'package:yogasala_plus_mobile/core/constants/storage_constants.dart';
 import 'package:yogasala_plus_mobile/core/utils/app_version_comparator.dart';
 import 'package:yogasala_plus_mobile/features/app/domain/entities/app_data.dart';
-import 'package:yogasala_plus_mobile/features/app/domain/usecases/get_app_data_use_case.dart';
-import 'package:yogasala_plus_mobile/features/app_director/domain/usecases/get_or_create_user_yoga_sala_plus_open_mobile_use_case.dart';
+import 'package:yogasala_plus_mobile/features/app/domain/use_cases/get_app_data_use_case.dart';
 import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:yogasala_plus_mobile/features/profile/domain/entities/user_yoga_sala_plus.dart';
+import 'package:yogasala_plus_mobile/features/profile/domain/use_cases/get_or_create_user_yoga_sala_plus_use_case.dart';
+import 'package:yogasala_plus_mobile/features/profile/domain/use_cases/sync_user_time_zone_use_case.dart';
+import 'package:yogasala_plus_mobile/features/subscriptions/domain/use_cases/log_in_purchases_use_case.dart';
+import 'package:yogasala_plus_mobile/features/subscriptions/presentation/bloc/entitlements_bloc.dart';
 
 part 'app_director_bloc.freezed.dart';
 part 'app_director_event.dart';
@@ -28,7 +31,10 @@ class AppDirectorBloc extends Bloc<AppDirectorEvent, AppDirectorState> {
     this._logger,
     this._authBloc,
     this._getAppDataUseCase,
-    this._getOrCreateUserYogaSalaPlusOpenMobileUseCase,
+    this._getOrCreateUserYogaSalaPlusUseCase,
+    this._syncUserTimeZoneUseCase,
+    this._logInPurchasesUseCase,
+    this._entitlementsBloc,
     @Named(DiConstants.sharedPrefs) this._prefs,
   ) : super(const AppDirectorState.initial()) {
     on<_EventLoaded>(_onLoaded);
@@ -38,8 +44,10 @@ class AppDirectorBloc extends Bloc<AppDirectorEvent, AppDirectorState> {
   final LoggerService _logger;
   final AuthBloc _authBloc;
   final GetAppDataUseCase _getAppDataUseCase;
-  final GetOrCreateUserYogaSalaPlusOpenMobileUseCase
-  _getOrCreateUserYogaSalaPlusOpenMobileUseCase;
+  final GetOrCreateUserYogaSalaPlusUseCase _getOrCreateUserYogaSalaPlusUseCase;
+  final SyncUserTimeZoneUseCase _syncUserTimeZoneUseCase;
+  final LogInPurchasesUseCase _logInPurchasesUseCase;
+  final EntitlementsBloc _entitlementsBloc;
   final LocalStorage _prefs;
 
   Future<void> _onLoaded(
@@ -97,11 +105,11 @@ class AppDirectorBloc extends Bloc<AppDirectorEvent, AppDirectorState> {
     }
 
     _logger.d('Getting or creating user yoga sala plus open mobile');
-    final result = await _getOrCreateUserYogaSalaPlusOpenMobileUseCase(
+    final result = await _getOrCreateUserYogaSalaPlusUseCase(
       const NoParams(),
     );
-    result.fold(
-      (failure) {
+    await result.fold<Future<void>>(
+      (failure) async {
         emit(
           AppDirectorState.failure(
             failure: failure,
@@ -114,7 +122,7 @@ class AppDirectorBloc extends Bloc<AppDirectorEvent, AppDirectorState> {
           'Getting or creating user yoga sala plus open mobile failed',
         );
       },
-      (userYogaSalaPlus) {
+      (userYogaSalaPlus) async {
         if (userYogaSalaPlus.forceLogout) {
           _authBloc.add(const AuthEvent.logoutRequested());
           emit(
@@ -129,9 +137,12 @@ class AppDirectorBloc extends Bloc<AppDirectorEvent, AppDirectorState> {
           );
           return;
         }
+
+        final syncedUser = await _syncUserTimeZoneSilently(userYogaSalaPlus);
+        await _syncPurchasesAndEntitlements(authState);
         emit(
           AppDirectorState.success(
-            userYogaSalaPlus: userYogaSalaPlus,
+            userYogaSalaPlus: syncedUser,
             isFirstLaunch: isFirstLaunch,
             storeUrlEn: appData.storeUrlEn,
             storeUrlTr: appData.storeUrlTr,
@@ -141,6 +152,42 @@ class AppDirectorBloc extends Bloc<AppDirectorEvent, AppDirectorState> {
           'Getting or creating user yoga sala plus open mobile success',
         );
       },
+    );
+  }
+
+  /// Identifies RevenueCat with Firebase uid and refreshes backend entitlements.
+  Future<void> _syncPurchasesAndEntitlements(AuthState authState) async {
+    final uid = authState.user?.id;
+    if (uid == null || uid.isEmpty) return;
+
+    final loginResult = await _logInPurchasesUseCase(
+      LogInPurchasesParams(appUserId: uid),
+    );
+    loginResult.fold(
+      (failure) => _logger.w(
+        'RevenueCat logIn failed: ${failure.message}',
+      ),
+      (_) {},
+    );
+
+    _entitlementsBloc.add(const EntitlementsEvent.fetched());
+  }
+
+  /// Syncs OS IANA zone to the profile; failures are ignored (non-blocking).
+  Future<UserYogaSalaPlus> _syncUserTimeZoneSilently(
+    UserYogaSalaPlus user,
+  ) async {
+    final result = await _syncUserTimeZoneUseCase(
+      SyncUserTimeZoneParams(user: user),
+    );
+    return result.fold(
+      (failure) {
+        _logger.w(
+          'Silent time zone sync failed: ${failure.message}',
+        );
+        return user;
+      },
+      (synced) => synced,
     );
   }
 
@@ -222,6 +269,35 @@ class AppDirectorBloc extends Bloc<AppDirectorEvent, AppDirectorState> {
       _prefs.write(StorageConstants.remoteBuildNumber, appData.buildNumber),
       _prefs.write(StorageConstants.storeUrlEn, appData.storeUrlEn),
       _prefs.write(StorageConstants.storeUrlTr, appData.storeUrlTr),
+      if (appData.badgeLevelOne != null)
+        _prefs.write(StorageConstants.badgeLevelOne, appData.badgeLevelOne),
+      if (appData.badgeLevelTwo != null)
+        _prefs.write(StorageConstants.badgeLevelTwo, appData.badgeLevelTwo),
+      if (appData.badgeLevelThree != null)
+        _prefs.write(
+          StorageConstants.badgeLevelThree,
+          appData.badgeLevelThree,
+        ),
+      if (appData.kvkkPrivacyPolicyEn != null)
+        _prefs.write(
+          StorageConstants.kvkkPrivacyPolicyEn,
+          appData.kvkkPrivacyPolicyEn,
+        ),
+      if (appData.kvkkPrivacyPolicyTr != null)
+        _prefs.write(
+          StorageConstants.kvkkPrivacyPolicyTr,
+          appData.kvkkPrivacyPolicyTr,
+        ),
+      if (appData.userConsentConfirmationFormEn != null)
+        _prefs.write(
+          StorageConstants.userConsentConfirmationFormEn,
+          appData.userConsentConfirmationFormEn,
+        ),
+      if (appData.userConsentConfirmationFormTr != null)
+        _prefs.write(
+          StorageConstants.userConsentConfirmationFormTr,
+          appData.userConsentConfirmationFormTr,
+        ),
     ]);
   }
 

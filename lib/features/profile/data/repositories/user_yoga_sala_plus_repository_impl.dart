@@ -20,17 +20,17 @@ class UserYogaSalaPlusRepositoryImpl implements UserYogaSalaPlusRepository {
   /// Get a post by ID.
   @override
   Future<Either<Failure, UserYogaSalaPlus>>
-  getOrCreateUserYogaSalaPlusOpenMobile() async {
+  getOrCreateUserYogaSalaPlus() async {
     try {
       final response = await _userYogaSalaPlusRemoteDataSource
-          .getOrCreateUserYogaSalaPlusOpenMobile();
+          .getOrCreateUserYogaSalaPlus();
       return Right(response.toEntity());
     } on Object catch (e, stackTrace) {
       return Left(
         _errorHandler.handleError(
           e,
           stackTrace: stackTrace,
-          reason: 'getOrCreateUserYogaSalaPlusOpenMobile',
+          reason: 'getOrCreateUserYogaSalaPlus',
         ),
       );
     }
@@ -92,6 +92,25 @@ class UserYogaSalaPlusRepositoryImpl implements UserYogaSalaPlusRepository {
           e,
           stackTrace: stackTrace,
           reason: 'getUserYogaSalaPlusMobileUser',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserYogaSalaPlus>> updateUserTimeZone(
+    String timeZone,
+  ) async {
+    try {
+      final response = await _userYogaSalaPlusRemoteDataSource
+          .updateUserTimeZone(timeZone);
+      return Right(response.toEntity());
+    } on Object catch (e, stackTrace) {
+      return Left(
+        _errorHandler.handleError(
+          e,
+          stackTrace: stackTrace,
+          reason: 'updateUserTimeZone',
         ),
       );
     }

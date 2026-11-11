@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:yogasala_plus_mobile/bootstrap/initialize_app_services.dart';
@@ -10,6 +11,7 @@ import 'package:yogasala_plus_mobile/features/app/app_config.dart';
 import 'package:yogasala_plus_mobile/features/app/presentation/bloc/app_bloc.dart';
 import 'package:yogasala_plus_mobile/features/app/presentation/pages/app_page.dart';
 import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:yogasala_plus_mobile/features/subscriptions/presentation/bloc/entitlements_bloc.dart';
 
 /// Bootstrap is the bootstrap class for the app
 class Bootstrap {
@@ -21,6 +23,9 @@ class Bootstrap {
     required String envPath,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
 
     await dotenv.load(fileName: envPath);
     final appConfig = AppConfig.fromEnv(flavor);
@@ -45,6 +50,7 @@ class Bootstrap {
             BlocProvider.value(value: getIt<ThemeBloc>()),
             BlocProvider.value(value: getIt<AppBloc>()),
             BlocProvider.value(value: getIt<AuthBloc>()),
+            BlocProvider.value(value: getIt<EntitlementsBloc>()),
           ],
           child: const AppPage(),
         ),

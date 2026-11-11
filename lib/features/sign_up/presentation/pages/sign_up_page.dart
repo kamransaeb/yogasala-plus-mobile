@@ -1,20 +1,21 @@
 import 'dart:async';
 
-import 'package:another_flushbar/flushbar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:enterprise_ui/enterprise_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
-import 'package:yogasala_plus_mobile/core/constants/app_assets_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_dimensions.dart';
+import 'package:yogasala_plus_mobile/core/constants/app_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_spacing.dart';
 import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
 import 'package:yogasala_plus_mobile/core/theme/theme_bloc.dart';
 import 'package:yogasala_plus_mobile/core/widgets/buttons/locale_buttons.dart';
+import 'package:yogasala_plus_mobile/core/widgets/buttons/theme_toggle_button.dart';
+import 'package:yogasala_plus_mobile/core/widgets/feedback/app_flushbar.dart';
 import 'package:yogasala_plus_mobile/di/injection.dart';
-import 'package:yogasala_plus_mobile/errors/error_mapper.dart';
 import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:yogasala_plus_mobile/features/sign_up/presentation/bloc/sign_up_bloc.dart';
 import 'package:yogasala_plus_mobile/features/sign_up/presentation/pages/sign_up_form.dart';
@@ -58,25 +59,11 @@ class SignUpPage extends StatelessWidget {
               state.maybeMap(
                 signUpFailure: (s) {
                   signUpBloc.add(const SignUpEvent.authFailed());
-                  unawaited(
-                    Flushbar<void>(
-                      duration: const Duration(seconds: 3),
-                      title: 'failure'.tr(),
-                      message: ErrorMapper.toUserMessage(s.failure),
-                      flushbarPosition: FlushbarPosition.TOP,
-                    ).show(context),
-                  );
+                  AppFlushbar.showFailure(context, s.failure);
                 },
                 signUpSuccess: (s) {
                   final router = context.router;
-                  unawaited(
-                    Flushbar<void>(
-                      duration: const Duration(seconds: 3),
-                      title: 'success'.tr(),
-                      message: 'success_send_sign_up'.tr(),
-                      flushbarPosition: FlushbarPosition.TOP,
-                    ).show(context),
-                  );
+                  AppFlushbar.showSuccess(context, 'success_send_sign_up'.tr());
                   unawaited(
                     Future.delayed(const Duration(seconds: 3), () {
                       unawaited(
@@ -98,30 +85,27 @@ class SignUpPage extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             title: Text('sign_up'.tr()),
-            actions: [
-              const LocaleButtons(),
-              BlocBuilder<ThemeBloc, ThemeState>(
-                builder: (context, themeState) {
-                  final status = themeState.currentThemeStatus;
-                  return IconButton(
-                    tooltip: status.displayName,
-                    icon: Icon(status.icon),
-                    onPressed: () => context.read<ThemeBloc>().add(
-                      const ThemeEvent.toggleRequested(),
-                    ),
-                  );
-                },
+            actions: const [
+              LocaleButtons(),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  AppDimensions.p8,
+                  0,
+                  AppDimensions.p24,
+                  0,
+                ),
+                child: ThemeToggleButton(size: AppButtonSize.large),
               ),
             ],
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppDimensions.pagePadding),
+            padding: const EdgeInsets.all(AppDimensions.p24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 AppSpacing.verticalSpacing48,
                 SvgPicture.asset(
-                  AppAssetsIcons.yogaSalaPlusLogo,
+                  AppIcons.yogaSalaPlusLogo,
                   height: AppDimensions.iconSizeExtraExtraExtraLarge,
                 ),
                 AppSpacing.verticalSpacing8,

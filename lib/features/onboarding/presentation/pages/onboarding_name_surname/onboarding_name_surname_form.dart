@@ -42,7 +42,7 @@ class _ScrollableFields extends StatelessWidget {
     return const Center(
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: AppDimensions.contentPadding),
+          padding: EdgeInsets.symmetric(vertical: AppDimensions.p16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -135,8 +135,8 @@ class _NextButton extends StatelessWidget {
       top: false,
       child: Padding(
         padding: const EdgeInsets.only(
-          top: AppDimensions.contentPadding,
-          bottom: AppDimensions.pagePadding,
+          top: AppDimensions.p16,
+          bottom: AppDimensions.p24,
         ),
         child: AppButton(
           size: AppButtonSize.large,

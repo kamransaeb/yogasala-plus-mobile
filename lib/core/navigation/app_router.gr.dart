@@ -27,6 +27,22 @@ class AppDirectorRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CalendarPage]
+class CalendarRoute extends PageRouteInfo<void> {
+  const CalendarRoute({List<PageRouteInfo>? children})
+    : super(CalendarRoute.name, initialChildren: children);
+
+  static const String name = 'CalendarRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CalendarPage();
+    },
+  );
+}
+
+/// generated route for
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -38,6 +54,38 @@ class HomeRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const HomePage();
+    },
+  );
+}
+
+/// generated route for
+/// [LeaderboardPage]
+class LeaderboardRoute extends PageRouteInfo<void> {
+  const LeaderboardRoute({List<PageRouteInfo>? children})
+    : super(LeaderboardRoute.name, initialChildren: children);
+
+  static const String name = 'LeaderboardRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LeaderboardPage();
+    },
+  );
+}
+
+/// generated route for
+/// [LiveVideosPage]
+class LiveVideosRoute extends PageRouteInfo<void> {
+  const LiveVideosRoute({List<PageRouteInfo>? children})
+    : super(LiveVideosRoute.name, initialChildren: children);
+
+  static const String name = 'LiveVideosRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LiveVideosPage();
     },
   );
 }
@@ -407,19 +455,122 @@ class OnboardingProfilePhotoRouteArgs {
 }
 
 /// generated route for
-/// [PostsDemoPage]
-class PostsDemoRoute extends PageRouteInfo<void> {
-  const PostsDemoRoute({List<PageRouteInfo>? children})
-    : super(PostsDemoRoute.name, initialChildren: children);
+/// [PaywallPage]
+class PaywallRoute extends PageRouteInfo<PaywallRouteArgs> {
+  PaywallRoute({Key? key, String? highlightPlan, List<PageRouteInfo>? children})
+    : super(
+        PaywallRoute.name,
+        args: PaywallRouteArgs(key: key, highlightPlan: highlightPlan),
+        rawQueryParams: {'highlightPlan': highlightPlan},
+        initialChildren: children,
+      );
 
-  static const String name = 'PostsDemoRoute';
+  static const String name = 'PaywallRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const PostsDemoPage();
+      final queryParams = data.queryParams;
+      final args = data.argsAs<PaywallRouteArgs>(
+        orElse: () => PaywallRouteArgs(
+          highlightPlan: queryParams.optString('highlightPlan'),
+        ),
+      );
+      return PaywallPage(key: args.key, highlightPlan: args.highlightPlan);
     },
   );
+}
+
+class PaywallRouteArgs {
+  const PaywallRouteArgs({this.key, this.highlightPlan});
+
+  final Key? key;
+
+  final String? highlightPlan;
+
+  @override
+  String toString() {
+    return 'PaywallRouteArgs{key: $key, highlightPlan: $highlightPlan}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PaywallRouteArgs) return false;
+    return key == other.key && highlightPlan == other.highlightPlan;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ highlightPlan.hashCode;
+}
+
+/// generated route for
+/// [PrivacyPolicyPage]
+class PrivacyPolicyRoute extends PageRouteInfo<void> {
+  const PrivacyPolicyRoute({List<PageRouteInfo>? children})
+    : super(PrivacyPolicyRoute.name, initialChildren: children);
+
+  static const String name = 'PrivacyPolicyRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PrivacyPolicyPage();
+    },
+  );
+}
+
+/// generated route for
+/// [ProfileInfoPage]
+class ProfileInfoRoute extends PageRouteInfo<ProfileInfoRouteArgs> {
+  ProfileInfoRoute({
+    required UserYogaSalaPlus userYogaSalaPlus,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ProfileInfoRoute.name,
+         args: ProfileInfoRouteArgs(
+           userYogaSalaPlus: userYogaSalaPlus,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'ProfileInfoRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ProfileInfoRouteArgs>();
+      return ProfileInfoPage(
+        userYogaSalaPlus: args.userYogaSalaPlus,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class ProfileInfoRouteArgs {
+  const ProfileInfoRouteArgs({required this.userYogaSalaPlus, this.key});
+
+  final UserYogaSalaPlus userYogaSalaPlus;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ProfileInfoRouteArgs{userYogaSalaPlus: $userYogaSalaPlus, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ProfileInfoRouteArgs) return false;
+    return userYogaSalaPlus == other.userYogaSalaPlus && key == other.key;
+  }
+
+  @override
+  int get hashCode => userYogaSalaPlus.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -439,6 +590,123 @@ class ProfileRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [QuizAttemptDetailPage]
+class QuizAttemptDetailRoute extends PageRouteInfo<QuizAttemptDetailRouteArgs> {
+  QuizAttemptDetailRoute({
+    required int attemptId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         QuizAttemptDetailRoute.name,
+         args: QuizAttemptDetailRouteArgs(attemptId: attemptId, key: key),
+         rawPathParams: {'attemptId': attemptId},
+         initialChildren: children,
+       );
+
+  static const String name = 'QuizAttemptDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<QuizAttemptDetailRouteArgs>(
+        orElse: () => QuizAttemptDetailRouteArgs(
+          attemptId: pathParams.getInt('attemptId'),
+        ),
+      );
+      return QuizAttemptDetailPage(attemptId: args.attemptId, key: args.key);
+    },
+  );
+}
+
+class QuizAttemptDetailRouteArgs {
+  const QuizAttemptDetailRouteArgs({required this.attemptId, this.key});
+
+  final int attemptId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'QuizAttemptDetailRouteArgs{attemptId: $attemptId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! QuizAttemptDetailRouteArgs) return false;
+    return attemptId == other.attemptId && key == other.key;
+  }
+
+  @override
+  int get hashCode => attemptId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [QuizAttemptsPage]
+class QuizAttemptsRoute extends PageRouteInfo<void> {
+  const QuizAttemptsRoute({List<PageRouteInfo>? children})
+    : super(QuizAttemptsRoute.name, initialChildren: children);
+
+  static const String name = 'QuizAttemptsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const QuizAttemptsPage();
+    },
+  );
+}
+
+/// generated route for
+/// [QuizPage]
+class QuizRoute extends PageRouteInfo<QuizRouteArgs> {
+  QuizRoute({required int videoId, Key? key, List<PageRouteInfo>? children})
+    : super(
+        QuizRoute.name,
+        args: QuizRouteArgs(videoId: videoId, key: key),
+        rawPathParams: {'videoId': videoId},
+        initialChildren: children,
+      );
+
+  static const String name = 'QuizRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<QuizRouteArgs>(
+        orElse: () => QuizRouteArgs(videoId: pathParams.getInt('videoId')),
+      );
+      return QuizPage(videoId: args.videoId, key: args.key);
+    },
+  );
+}
+
+class QuizRouteArgs {
+  const QuizRouteArgs({required this.videoId, this.key});
+
+  final int videoId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'QuizRouteArgs{videoId: $videoId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! QuizRouteArgs) return false;
+    return videoId == other.videoId && key == other.key;
+  }
+
+  @override
+  int get hashCode => videoId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [ResetPasswordPage]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})
@@ -455,6 +723,54 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SeriePage]
+class SerieRoute extends PageRouteInfo<SerieRouteArgs> {
+  SerieRoute({required int serieId, Key? key, List<PageRouteInfo>? children})
+    : super(
+        SerieRoute.name,
+        args: SerieRouteArgs(serieId: serieId, key: key),
+        rawPathParams: {'serieId': serieId},
+        initialChildren: children,
+      );
+
+  static const String name = 'SerieRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<SerieRouteArgs>(
+        orElse: () => SerieRouteArgs(serieId: pathParams.getInt('serieId')),
+      );
+      return SeriePage(serieId: args.serieId, key: args.key);
+    },
+  );
+}
+
+class SerieRouteArgs {
+  const SerieRouteArgs({required this.serieId, this.key});
+
+  final int serieId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'SerieRouteArgs{serieId: $serieId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! SerieRouteArgs) return false;
+    return serieId == other.serieId && key == other.key;
+  }
+
+  @override
+  int get hashCode => serieId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [SignUpPage]
 class SignUpRoute extends PageRouteInfo<void> {
   const SignUpRoute({List<PageRouteInfo>? children})
@@ -468,4 +784,211 @@ class SignUpRoute extends PageRouteInfo<void> {
       return const SignUpPage();
     },
   );
+}
+
+/// generated route for
+/// [TeacherPage]
+class TeacherRoute extends PageRouteInfo<TeacherRouteArgs> {
+  TeacherRoute({
+    required int teacherId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         TeacherRoute.name,
+         args: TeacherRouteArgs(teacherId: teacherId, key: key),
+         rawPathParams: {'teacherId': teacherId},
+         initialChildren: children,
+       );
+
+  static const String name = 'TeacherRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<TeacherRouteArgs>(
+        orElse: () =>
+            TeacherRouteArgs(teacherId: pathParams.getInt('teacherId')),
+      );
+      return TeacherPage(teacherId: args.teacherId, key: args.key);
+    },
+  );
+}
+
+class TeacherRouteArgs {
+  const TeacherRouteArgs({required this.teacherId, this.key});
+
+  final int teacherId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'TeacherRouteArgs{teacherId: $teacherId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TeacherRouteArgs) return false;
+    return teacherId == other.teacherId && key == other.key;
+  }
+
+  @override
+  int get hashCode => teacherId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [TermsOfServicePage]
+class TermsOfServiceRoute extends PageRouteInfo<void> {
+  const TermsOfServiceRoute({List<PageRouteInfo>? children})
+    : super(TermsOfServiceRoute.name, initialChildren: children);
+
+  static const String name = 'TermsOfServiceRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TermsOfServicePage();
+    },
+  );
+}
+
+/// generated route for
+/// [VideoPage]
+class VideoRoute extends PageRouteInfo<VideoRouteArgs> {
+  VideoRoute({
+    required int videoId,
+    required int serieId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         VideoRoute.name,
+         args: VideoRouteArgs(videoId: videoId, serieId: serieId, key: key),
+         rawPathParams: {'videoId': videoId, 'serieId': serieId},
+         initialChildren: children,
+       );
+
+  static const String name = 'VideoRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<VideoRouteArgs>(
+        orElse: () => VideoRouteArgs(
+          videoId: pathParams.getInt('videoId'),
+          serieId: pathParams.getInt('serieId'),
+        ),
+      );
+      return VideoPage(
+        videoId: args.videoId,
+        serieId: args.serieId,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class VideoRouteArgs {
+  const VideoRouteArgs({
+    required this.videoId,
+    required this.serieId,
+    this.key,
+  });
+
+  final int videoId;
+
+  final int serieId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'VideoRouteArgs{videoId: $videoId, serieId: $serieId, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! VideoRouteArgs) return false;
+    return videoId == other.videoId &&
+        serieId == other.serieId &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode => videoId.hashCode ^ serieId.hashCode ^ key.hashCode;
+}
+
+/// generated route for
+/// [VideoPlayerPage]
+class VideoPlayerRoute extends PageRouteInfo<VideoPlayerRouteArgs> {
+  VideoPlayerRoute({
+    required int videoId,
+    int? serieId,
+    String? title,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         VideoPlayerRoute.name,
+         args: VideoPlayerRouteArgs(
+           videoId: videoId,
+           serieId: serieId,
+           title: title,
+           key: key,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'VideoPlayerRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<VideoPlayerRouteArgs>();
+      return VideoPlayerPage(
+        videoId: args.videoId,
+        serieId: args.serieId,
+        title: args.title,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class VideoPlayerRouteArgs {
+  const VideoPlayerRouteArgs({
+    required this.videoId,
+    this.serieId,
+    this.title,
+    this.key,
+  });
+
+  final int videoId;
+
+  final int? serieId;
+
+  final String? title;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'VideoPlayerRouteArgs{videoId: $videoId, serieId: $serieId, title: $title, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! VideoPlayerRouteArgs) return false;
+    return videoId == other.videoId &&
+        serieId == other.serieId &&
+        title == other.title &&
+        key == other.key;
+  }
+
+  @override
+  int get hashCode =>
+      videoId.hashCode ^ serieId.hashCode ^ title.hashCode ^ key.hashCode;
 }

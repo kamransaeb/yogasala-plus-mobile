@@ -1,18 +1,16 @@
 import 'dart:async';
 
-import 'package:another_flushbar/flushbar.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:enterprise_core/enterprise_core.dart';
 import 'package:enterprise_logger/enterprise_logger.dart';
 import 'package:enterprise_ui/enterprise_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
+import 'package:yogasala_plus_mobile/core/widgets/feedback/app_flushbar.dart';
 import 'package:yogasala_plus_mobile/di/injection.dart';
-import 'package:yogasala_plus_mobile/errors/error_mapper.dart';
-import 'package:yogasala_plus_mobile/features/app_director/presentation/widgets/update_app_dialog.dart';
 import 'package:yogasala_plus_mobile/features/app_director/presentation/bloc/app_director_bloc.dart';
+import 'package:yogasala_plus_mobile/features/app_director/presentation/widgets/update_app_dialog.dart';
 
 /// Unguarded bootstrap route: AppData → auth → Login or Profile.
 ///
@@ -54,16 +52,7 @@ class AppDirectorPage extends StatelessWidget {
               unawaited(context.router.replaceAll([LoginRoute()]));
               return;
             }
-            if (failure != null) {
-              unawaited(
-                Flushbar<void>(
-                  duration: const Duration(seconds: 3),
-                  title: 'failure'.tr(),
-                  message: ErrorMapper.toUserMessage(failure),
-                  flushbarPosition: FlushbarPosition.TOP,
-                ).show(context),
-              );
-            }
+            if (failure != null) AppFlushbar.showFailure(context, failure);
             if (state.isAppUpdate) {
               final bloc = context.read<AppDirectorBloc>();
               unawaited(

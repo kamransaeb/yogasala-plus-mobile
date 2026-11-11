@@ -1,15 +1,15 @@
-import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
-import 'package:yogasala_plus_mobile/core/constants/storage_constants.dart';
 import 'package:enterprise_logger/enterprise_logger.dart';
 import 'package:enterprise_storage/enterprise_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
+import 'package:yogasala_plus_mobile/core/constants/storage_constants.dart';
 
+part 'theme_bloc.freezed.dart';
 part 'theme_event.dart';
 part 'theme_state.dart';
-part 'theme_bloc.freezed.dart';
 
 /// Owns [ThemeMode] and persists it in shared preferences.
 /// @lazySingleton so the bloc is not created during configureDependencies()

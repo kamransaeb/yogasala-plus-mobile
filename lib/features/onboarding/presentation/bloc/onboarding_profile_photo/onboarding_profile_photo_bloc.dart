@@ -1,24 +1,26 @@
 import 'dart:typed_data';
 
+import 'package:enterprise_core/enterprise_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:yogasala_plus_mobile/features/profile/domain/entities/user_yoga_sala_plus.dart';
+import 'package:yogasala_plus_mobile/features/profile/domain/use_cases/upload_profile_image_use_case.dart';
 
 part 'onboarding_profile_photo_event.dart';
 part 'onboarding_profile_photo_state.dart';
 part 'onboarding_profile_photo_bloc.freezed.dart';
 
-/// Owns profile-photo picking for onboarding step 4 (local image only).
+/// Owns profile-photo picking and Firebase upload for onboarding step 4.
 @injectable
 class OnboardingProfilePhotoBloc
     extends Bloc<OnboardingProfilePhotoEvent, OnboardingProfilePhotoState> {
   /// Creates a [OnboardingProfilePhotoBloc].
-  OnboardingProfilePhotoBloc()
-      : _imagePicker = ImagePicker(),
-        super(const OnboardingProfilePhotoState()) {
+  OnboardingProfilePhotoBloc(this._uploadProfileImage)
+    : _imagePicker = ImagePicker(),
+      super(const OnboardingProfilePhotoState()) {
     on<_EventFetched>(_onFetched);
     on<_EventGallerySelected>(_onGallerySelected);
     on<_EventCameraSelected>(_onCameraSelected);
@@ -26,6 +28,7 @@ class OnboardingProfilePhotoBloc
     on<_EventSaved>(_onSaved);
   }
 
+  final UploadProfileImageUseCase _uploadProfileImage;
   final ImagePicker _imagePicker;
 
   void _onFetched(
@@ -36,6 +39,7 @@ class OnboardingProfilePhotoBloc
       state.copyWith(
         user: event.userYogaSalaPlus,
         status: FormzSubmissionStatus.initial,
+        failure: null,
       ),
     );
   }
@@ -56,6 +60,7 @@ class OnboardingProfilePhotoBloc
       state.copyWith(
         imageBytes: bytes,
         status: FormzSubmissionStatus.initial,
+        failure: null,
       ),
     );
   }
@@ -76,6 +81,7 @@ class OnboardingProfilePhotoBloc
       state.copyWith(
         imageBytes: bytes,
         status: FormzSubmissionStatus.initial,
+        failure: null,
       ),
     );
   }
@@ -88,36 +94,64 @@ class OnboardingProfilePhotoBloc
       state.copyWith(
         imageBytes: null,
         status: FormzSubmissionStatus.initial,
+        failure: null,
       ),
     );
   }
 
-  void _onSaved(
+  Future<void> _onSaved(
     _EventSaved event,
     Emitter<OnboardingProfilePhotoState> emit,
-  ) {
+  ) async {
     final user = state.user;
     if (user == null) return;
 
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    emit(
+      state.copyWith(
+        status: FormzSubmissionStatus.inProgress,
+        failure: null,
+      ),
+    );
 
-    if (state.imageBytes == null) {
+    final bytes = state.imageBytes;
+    if (bytes == null) {
       emit(
         state.copyWith(
           user: user.copyWith(clearProfileImageUrl: true),
           status: FormzSubmissionStatus.success,
+          failure: null,
         ),
       );
       return;
     }
 
-    // TODO(onboarding): upload imageBytes to storage and set profileImageUrl.
-    emit(
-      state.copyWith(
-        user: user.copyWith(
-          profileImageUrl: user.profileImageUrl ?? '',
+    const fileName = 'profile.jpg';
+    final contentType =
+        UploadProfileImageUseCase.contentTypeFor(fileName: fileName) ??
+        'image/jpeg';
+    final result = await _uploadProfileImage(
+      UploadProfileImageParams(
+        bytes: bytes,
+        fileName: fileName,
+        contentType: contentType,
+      ),
+    );
+
+    if (emit.isDone) return;
+
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.failure,
+          failure: failure,
         ),
-        status: FormzSubmissionStatus.success,
+      ),
+      (url) => emit(
+        state.copyWith(
+          user: user.copyWith(profileImageUrl: url),
+          status: FormzSubmissionStatus.success,
+          failure: null,
+        ),
       ),
     );
   }

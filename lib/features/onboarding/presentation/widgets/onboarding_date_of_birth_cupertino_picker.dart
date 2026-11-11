@@ -1,9 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:enterprise_ui/enterprise_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yogasala_plus_mobile/core/constants/app_assets_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_dimensions.dart';
+import 'package:yogasala_plus_mobile/core/constants/app_icons.dart';
 import 'package:yogasala_plus_mobile/core/widgets/svg_icon.dart';
 import 'package:yogasala_plus_mobile/features/onboarding/presentation/bloc/onboarding_date_of_birth/onboarding_date_of_birth_bloc.dart';
 
@@ -34,7 +35,7 @@ class OnboardingDateOfBirthCupertinoPicker extends StatelessWidget {
         FractionallySizedBox(
           widthFactor: 0.3,
           child: Container(
-            height: AppDimensions.pagePadding / 5,
+            height: AppDimensions.p24 / 5,
             decoration: BoxDecoration(
               color: CupertinoDynamicColor.resolve(
                 CupertinoColors.tertiarySystemFill,
@@ -48,12 +49,16 @@ class OnboardingDateOfBirthCupertinoPicker extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: IconButton(
-            tooltip: 'ok'.tr(),
-            onPressed: () => Navigator.pop(context),
-            icon: const SvgIcon(
-              asset: AppAssetsIcons.arrowDone,
-              size: AppDimensions.iconSizeLarge,
+          child: Tooltip(
+            message: 'ok'.tr(),
+            child: AppButton(
+              variant: AppButtonVariant.icon,
+              iconWidget: const SvgIcon(
+                asset: AppIcons.arrowDone,
+                size: AppDimensions.iconSizeLarge,
+              ),
+              padding: const EdgeInsets.all(AppDimensions.p8),
+              onPressed: () => Navigator.pop(context),
             ),
           ),
         ),

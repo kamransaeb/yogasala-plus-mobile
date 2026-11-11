@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:enterprise_core/enterprise_core.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_tokens.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_user.dart';
+import 'package:yogasala_plus_mobile/features/profile/domain/entities/user_yoga_sala_plus.dart';
 
 /// The repository for the authentication service.
 abstract class AuthRepository {
@@ -18,6 +19,9 @@ abstract class AuthRepository {
 
   /// Refreshes the authentication tokens.
   Future<Either<Failure, AuthTokens>> refreshAuthTokens();
+
+  /// Returns a non-expired Firebase ID token, refreshing when needed.
+  Future<Either<Failure, String>> getValidAccessToken();
 
   /// Gets the current user.
   Future<Either<Failure, AuthUser?>> getCurrentAuthUser();

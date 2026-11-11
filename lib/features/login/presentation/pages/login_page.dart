@@ -1,20 +1,20 @@
 import 'dart:async';
 
-import 'package:another_flushbar/flushbar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:enterprise_ui/enterprise_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
-import 'package:yogasala_plus_mobile/core/constants/app_assets_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_dimensions.dart';
+import 'package:yogasala_plus_mobile/core/constants/app_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_spacing.dart';
 import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
 import 'package:yogasala_plus_mobile/core/widgets/buttons/locale_buttons.dart';
 import 'package:yogasala_plus_mobile/core/widgets/buttons/theme_toggle_button.dart';
+import 'package:yogasala_plus_mobile/core/widgets/feedback/app_flushbar.dart';
 import 'package:yogasala_plus_mobile/di/injection.dart';
-import 'package:yogasala_plus_mobile/errors/error_mapper.dart';
 import 'package:yogasala_plus_mobile/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:yogasala_plus_mobile/features/login/presentation/bloc/login_bloc.dart';
 import 'package:yogasala_plus_mobile/features/login/presentation/pages/login_form.dart';
@@ -68,14 +68,7 @@ class LoginPage extends StatelessWidget {
                   // Reset submission status only, keep field text in
                   // controllers.
                   context.read<LoginBloc>().add(const LoginEvent.authFailed());
-                  unawaited(
-                    Flushbar<void>(
-                      duration: const Duration(seconds: 3),
-                      title: 'failure'.tr(),
-                      message: ErrorMapper.toUserMessage(s.failure),
-                      flushbarPosition: FlushbarPosition.TOP,
-                    ).show(context),
-                  );
+                  AppFlushbar.showFailure(context, s.failure);
                 },
                 authenticated: (_) {
                   onResult?.call(success: true);
@@ -96,17 +89,28 @@ class LoginPage extends StatelessWidget {
             title: Text('login'.tr()),
             actions: const [
               LocaleButtons(),
-              ThemeToggleButton(),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  AppDimensions.p8,
+                  0,
+                  AppDimensions.p24,
+                  0,
+                ),
+                child: ThemeToggleButton(
+                  size: AppButtonSize.large,
+                  padding: EdgeInsets.zero,
+                ),
+              ),
             ],
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppDimensions.pagePadding),
+            padding: const EdgeInsets.all(AppDimensions.p24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 AppSpacing.verticalSpacing48,
                 SvgPicture.asset(
-                  AppAssetsIcons.yogaSalaPlusLogo,
+                  AppIcons.yogaSalaPlusLogo,
                   height: AppDimensions.iconSizeExtraExtraExtraLarge,
                 ),
                 AppSpacing.verticalSpacing8,

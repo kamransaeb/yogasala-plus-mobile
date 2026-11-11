@@ -30,6 +30,7 @@ class UserYogaSalaPlusModel implements ModelToEntityMapper<UserYogaSalaPlus> {
     this.profileImageUrl,
     this.dateOfBirth,
     this.gender,
+    this.timeZone,
   });
 
   /// JSON constructor
@@ -60,6 +61,7 @@ class UserYogaSalaPlusModel implements ModelToEntityMapper<UserYogaSalaPlus> {
     profileImageUrl: profileImageUrl,
     dateOfBirth: dateOfBirth,
     gender: gender,
+    timeZone: timeZone,
   );
 
   /// ID
@@ -115,4 +117,7 @@ class UserYogaSalaPlusModel implements ModelToEntityMapper<UserYogaSalaPlus> {
 
   /// Gender
   final int? gender;
+
+  /// IANA time zone id (e.g. `Europe/Istanbul`).
+  final String? timeZone;
 }

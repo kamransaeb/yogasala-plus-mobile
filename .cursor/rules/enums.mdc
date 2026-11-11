@@ -1,0 +1,53 @@
+---
+description: Wire enums live in lib/core/enums with short ordinals
+globs: lib/core/enums/**/*.dart
+alwaysApply: false
+---
+
+# Enums (wire shorts)
+
+Put all shared enums in `lib/core/enums/`.
+
+Use field-based enhanced Dart enums: `@JsonValue` + a `const` constructor
+with an explicit `wireValue` (and any per-value data as `final` fields),
+plus a `fromWire` lookup over `values`:
+
+```dart
+enum SubscriptionPlan {
+  @JsonValue(0)
+  standard(wireValue: 0, label: 'STANDARD'),
+  @JsonValue(1)
+  premium(wireValue: 1, label: 'PREMIUM');
+
+  const SubscriptionPlan({required this.wireValue, required this.label});
+
+  final int wireValue;
+  final String label;
+
+  static SubscriptionPlan? fromWire(int? value) {
+    for (final plan in values) {
+      if (plan.wireValue == value) return plan;
+    }
+    return null;
+  }
+}
+```
+
+- Never derive `wireValue` from `index`; reordering values would change the wire.
+- Prefer `final` fields over `switch (this)` getters for per-value data.
+- Plain enums with only `@JsonValue` (no members) don't need fields.
+
+## Known ordinals
+
+| Enum | Wire |
+|------|------|
+| `SubscriptionPlan` | 0 STANDARD, 1 PREMIUM |
+| `SubscriptionStatus` | 0 ACTIVE … 3 REVOKED |
+| `SubscriptionSource` | 0 REVENUECAT, 1 MANUAL |
+| `Entitlement` | 0 VIDEO, 1 LIVE |
+| `ActivityType` | 0 VIDEO, 1 LIVE |
+| `LiveProvider` | 0 ZOOM |
+| `QuizStatus` | 0–2 |
+
+JSON models keep `int` / `List<int>` and map with `fromWire` in `toEntity()`.
+Do not treat plan/status/source/entitlements as wire strings.

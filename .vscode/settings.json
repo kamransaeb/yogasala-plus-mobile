@@ -1,4 +1,5 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "workbench.colorTheme": "Darcula IntelliJ Theme for Dart"
+    "workbench.colorTheme": "Darcula IntelliJ Theme for Dart",
+    "java.compile.nullAnalysis.mode": "automatic"
 }

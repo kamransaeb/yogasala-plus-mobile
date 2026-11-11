@@ -92,22 +92,12 @@ class _BackToLoginLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return TextButton(
-      key: const Key('resetPasswordForm_backToLogin_textButton'),
-      style: TextButton.styleFrom(
-        padding: EdgeInsets.zero,
-        minimumSize: Size.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
+    return AppButton(
+      padding: EdgeInsets.zero,
+      size: AppButtonSize.small,
+      label: 'back_to_login'.tr(),
+      variant: AppButtonVariant.text,
       onPressed: () => context.router.maybePop(),
-      child: Text(
-        'back_to_login'.tr(),
-        style: theme.textTheme.titleSmall?.copyWith(
-          color: theme.colorScheme.primary,
-        ),
-      ),
     );
   }
 }

@@ -1,0 +1,47 @@
+---
+description: Clean architecture, DI, and project-wide conventions for YogaSala Plus mobile
+alwaysApply: true
+---
+
+# YogaSala Plus Mobile — Architecture
+
+## Feature layout
+
+```
+lib/features/<feature>/
+  data/api/          # *_endpoints.dart + *_api_client.dart
+  data/datasources/  # abstract + *_impl
+  data/models/       # @JsonSerializable DTOs → toEntity()
+  data/repositories/ # XRepositoryImpl (@LazySingleton(as: XRepository))
+  domain/entities|repositories|use_cases/
+  presentation/bloc|pages|widgets/
+```
+
+Copy **teachers**, **activity**, or **live_sessions** when adding features.
+
+## Naming: Repository vs Service
+
+- Domain port: `XRepository` in `domain/repositories/`
+- Data adapter: `XRepositoryImpl` in `data/repositories/` — even when it wraps a third-party SDK (e.g. RevenueCat → `PurchasesRepositoryImpl`)
+- Do **not** name repository implementations `*Service`
+- Reserve `*Service` for cross-cutting infra already in the app (e.g. `LoggerService`), not feature data adapters
+
+## DI & domain
+
+- `injectable` + `getIt`; run `build_runner` after new annotations
+- `@injectable` use cases/blocs; `@lazySingleton` / `@LazySingleton(as:)` for API/repos/DS
+- Use cases: `extends BaseUseCase<T, Params>`; Params `Equatable` or `NoParams`
+- Repos: `Future<Either<Failure, T>>`; `try/on Object` → `_errorHandler.handleError`
+
+## Shared locations
+
+- Enums → `lib/core/enums/` only (never feature folders)
+- Router → `lib/core/navigation/app_router.dart`
+- Errors → `ErrorMapper` in `lib/errors/`
+- i18n → `assets/lang/en.json` + `tr.json` (snake_case keys)
+
+## Style
+
+- Follow `very_good_analysis`; public APIs get `///` docs
+- Imports: dart → packages → `core/` → `di`/`errors` → `features/`
+- Do not invent endpoints/fields; do not call `/admin/...` from mobile

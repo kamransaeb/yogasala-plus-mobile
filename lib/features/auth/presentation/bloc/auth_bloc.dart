@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_user.dart';
-import 'package:yogasala_plus_mobile/features/auth/domain/usecases/check_auth_status_usecase.dart';
-import 'package:yogasala_plus_mobile/features/auth/domain/usecases/login_usecase.dart';
-import 'package:yogasala_plus_mobile/features/auth/domain/usecases/logout_usecase.dart';
-import 'package:yogasala_plus_mobile/features/auth/domain/usecases/reset_password_use_case.dart';
-import 'package:yogasala_plus_mobile/features/auth/domain/usecases/sign_up_use_case.dart';
+import 'package:yogasala_plus_mobile/features/auth/domain/use_cases/check_auth_status_use_case.dart';
+import 'package:yogasala_plus_mobile/features/auth/domain/use_cases/login_use_case.dart';
+import 'package:yogasala_plus_mobile/features/auth/domain/use_cases/logout_use_case.dart';
+import 'package:yogasala_plus_mobile/features/auth/domain/use_cases/reset_password_use_case.dart';
+import 'package:yogasala_plus_mobile/features/auth/domain/use_cases/sign_up_use_case.dart';
+import 'package:yogasala_plus_mobile/features/subscriptions/domain/use_cases/log_out_purchases_use_case.dart';
+import 'package:yogasala_plus_mobile/features/subscriptions/presentation/bloc/entitlements_bloc.dart';
 
 part 'auth_bloc.freezed.dart';
 part 'auth_event.dart';
@@ -24,6 +26,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this._resetPasswordUseCase,
     this._logoutUseCase,
     this._checkAuthStatusUseCase,
+    this._logOutPurchasesUseCase,
+    this._entitlementsBloc,
     this._logger,
   ) : super(const AuthState.initial()) {
     on<_EventCheckStatusRequested>(_onCheckStatusRequested);
@@ -38,6 +42,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignUpUseCase _signUpUseCase;
   final ResetPasswordUseCase _resetPasswordUseCase;
   final LogoutUseCase _logoutUseCase;
+  final LogOutPurchasesUseCase _logOutPurchasesUseCase;
+  final EntitlementsBloc _entitlementsBloc;
   final LoggerService _logger;
 
   Future<void> _onCheckStatusRequested(
@@ -116,9 +122,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(const AuthState.loading());
     final result = await _logoutUseCase(const NoParams());
-    result.fold(
-      (failure) => emit(AuthState.failure(failure: failure)),
-      (_) => emit(const AuthState.unauthenticated()),
+    await result.fold(
+      (failure) async => emit(AuthState.failure(failure: failure)),
+      (_) async {
+        final purchasesResult = await _logOutPurchasesUseCase(const NoParams());
+        purchasesResult.fold(
+          (failure) => _logger.w(
+            'RevenueCat logOut failed: ${failure.message}',
+          ),
+          (_) {},
+        );
+        _entitlementsBloc.add(const EntitlementsEvent.cleared());
+        emit(const AuthState.unauthenticated());
+      },
     );
   }
 }

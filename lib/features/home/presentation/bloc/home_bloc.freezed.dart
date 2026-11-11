@@ -55,11 +55,12 @@ extension HomeEventPatterns on HomeEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _EventFetched value)?  fetched,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _EventFetched value)?  fetched,TResult Function( _EventCategorySeriesNextPageRequested value)?  categorySeriesNextPageRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _EventFetched() when fetched != null:
-return fetched(_that);case _:
+return fetched(_that);case _EventCategorySeriesNextPageRequested() when categorySeriesNextPageRequested != null:
+return categorySeriesNextPageRequested(_that);case _:
   return orElse();
 
 }
@@ -77,11 +78,12 @@ return fetched(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _EventFetched value)  fetched,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _EventFetched value)  fetched,required TResult Function( _EventCategorySeriesNextPageRequested value)  categorySeriesNextPageRequested,}){
 final _that = this;
 switch (_that) {
 case _EventFetched():
-return fetched(_that);case _:
+return fetched(_that);case _EventCategorySeriesNextPageRequested():
+return categorySeriesNextPageRequested(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -98,11 +100,12 @@ return fetched(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _EventFetched value)?  fetched,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _EventFetched value)?  fetched,TResult? Function( _EventCategorySeriesNextPageRequested value)?  categorySeriesNextPageRequested,}){
 final _that = this;
 switch (_that) {
 case _EventFetched() when fetched != null:
-return fetched(_that);case _:
+return fetched(_that);case _EventCategorySeriesNextPageRequested() when categorySeriesNextPageRequested != null:
+return categorySeriesNextPageRequested(_that);case _:
   return null;
 
 }
@@ -119,10 +122,11 @@ return fetched(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetched,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetched,TResult Function( int categoryId)?  categorySeriesNextPageRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EventFetched() when fetched != null:
-return fetched();case _:
+return fetched();case _EventCategorySeriesNextPageRequested() when categorySeriesNextPageRequested != null:
+return categorySeriesNextPageRequested(_that.categoryId);case _:
   return orElse();
 
 }
@@ -140,10 +144,11 @@ return fetched();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetched,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetched,required TResult Function( int categoryId)  categorySeriesNextPageRequested,}) {final _that = this;
 switch (_that) {
 case _EventFetched():
-return fetched();case _:
+return fetched();case _EventCategorySeriesNextPageRequested():
+return categorySeriesNextPageRequested(_that.categoryId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -160,10 +165,11 @@ return fetched();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetched,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetched,TResult? Function( int categoryId)?  categorySeriesNextPageRequested,}) {final _that = this;
 switch (_that) {
 case _EventFetched() when fetched != null:
-return fetched();case _:
+return fetched();case _EventCategorySeriesNextPageRequested() when categorySeriesNextPageRequested != null:
+return categorySeriesNextPageRequested(_that.categoryId);case _:
   return null;
 
 }
@@ -202,6 +208,72 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _EventCategorySeriesNextPageRequested extends HomeEvent {
+  const _EventCategorySeriesNextPageRequested({required this.categoryId}): super._();
+  
+
+ final  int categoryId;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EventCategorySeriesNextPageRequestedCopyWith<_EventCategorySeriesNextPageRequested> get copyWith => __$EventCategorySeriesNextPageRequestedCopyWithImpl<_EventCategorySeriesNextPageRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EventCategorySeriesNextPageRequested&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,categoryId);
+
+@override
+String toString() {
+  return 'HomeEvent.categorySeriesNextPageRequested(categoryId: $categoryId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$EventCategorySeriesNextPageRequestedCopyWith<$Res> implements $HomeEventCopyWith<$Res> {
+  factory _$EventCategorySeriesNextPageRequestedCopyWith(_EventCategorySeriesNextPageRequested value, $Res Function(_EventCategorySeriesNextPageRequested) _then) = __$EventCategorySeriesNextPageRequestedCopyWithImpl;
+@useResult
+$Res call({
+ int categoryId
+});
+
+
+
+
+}
+/// @nodoc
+class __$EventCategorySeriesNextPageRequestedCopyWithImpl<$Res>
+    implements _$EventCategorySeriesNextPageRequestedCopyWith<$Res> {
+  __$EventCategorySeriesNextPageRequestedCopyWithImpl(this._self, this._then);
+
+  final _EventCategorySeriesNextPageRequested _self;
+  final $Res Function(_EventCategorySeriesNextPageRequested) _then;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? categoryId = null,}) {
+  return _then(_EventCategorySeriesNextPageRequested(
+categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
 
 /// @nodoc
 mixin _$HomeState {
@@ -320,12 +392,12 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<VideoCategorySection> sections)?  success,TResult Function( Failure failure)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<CategorySection> categorySections,  Map<int, Teacher> teachersById,  Failure? actionFailure)?  success,TResult Function( Failure failure)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StateInitial() when initial != null:
 return initial();case _StateLoading() when loading != null:
 return loading();case _StateSuccess() when success != null:
-return success(_that.sections);case _StateFailure() when failure != null:
+return success(_that.categorySections,_that.teachersById,_that.actionFailure);case _StateFailure() when failure != null:
 return failure(_that.failure);case _:
   return orElse();
 
@@ -344,12 +416,12 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<VideoCategorySection> sections)  success,required TResult Function( Failure failure)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<CategorySection> categorySections,  Map<int, Teacher> teachersById,  Failure? actionFailure)  success,required TResult Function( Failure failure)  failure,}) {final _that = this;
 switch (_that) {
 case _StateInitial():
 return initial();case _StateLoading():
 return loading();case _StateSuccess():
-return success(_that.sections);case _StateFailure():
+return success(_that.categorySections,_that.teachersById,_that.actionFailure);case _StateFailure():
 return failure(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
@@ -367,12 +439,12 @@ return failure(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<VideoCategorySection> sections)?  success,TResult? Function( Failure failure)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<CategorySection> categorySections,  Map<int, Teacher> teachersById,  Failure? actionFailure)?  success,TResult? Function( Failure failure)?  failure,}) {final _that = this;
 switch (_that) {
 case _StateInitial() when initial != null:
 return initial();case _StateLoading() when loading != null:
 return loading();case _StateSuccess() when success != null:
-return success(_that.sections);case _StateFailure() when failure != null:
+return success(_that.categorySections,_that.teachersById,_that.actionFailure);case _StateFailure() when failure != null:
 return failure(_that.failure);case _:
   return null;
 
@@ -449,16 +521,24 @@ String toString() {
 
 
 class _StateSuccess extends HomeState {
-  const _StateSuccess({final  List<VideoCategorySection> sections = const <VideoCategorySection>[]}): _sections = sections,super._();
+  const _StateSuccess({final  List<CategorySection> categorySections = const <CategorySection>[], final  Map<int, Teacher> teachersById = const <int, Teacher>{}, this.actionFailure}): _categorySections = categorySections,_teachersById = teachersById,super._();
   
 
- final  List<VideoCategorySection> _sections;
-@JsonKey() List<VideoCategorySection> get sections {
-  if (_sections is EqualUnmodifiableListView) return _sections;
+ final  List<CategorySection> _categorySections;
+@JsonKey() List<CategorySection> get categorySections {
+  if (_categorySections is EqualUnmodifiableListView) return _categorySections;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_sections);
+  return EqualUnmodifiableListView(_categorySections);
 }
 
+ final  Map<int, Teacher> _teachersById;
+@JsonKey() Map<int, Teacher> get teachersById {
+  if (_teachersById is EqualUnmodifiableMapView) return _teachersById;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_teachersById);
+}
+
+ final  Failure? actionFailure;
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -470,16 +550,16 @@ _$StateSuccessCopyWith<_StateSuccess> get copyWith => __$StateSuccessCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StateSuccess&&const DeepCollectionEquality().equals(other._sections, _sections));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StateSuccess&&const DeepCollectionEquality().equals(other._categorySections, _categorySections)&&const DeepCollectionEquality().equals(other._teachersById, _teachersById)&&(identical(other.actionFailure, actionFailure) || other.actionFailure == actionFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_sections));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categorySections),const DeepCollectionEquality().hash(_teachersById),actionFailure);
 
 @override
 String toString() {
-  return 'HomeState.success(sections: $sections)';
+  return 'HomeState.success(categorySections: $categorySections, teachersById: $teachersById, actionFailure: $actionFailure)';
 }
 
 
@@ -490,7 +570,7 @@ abstract mixin class _$StateSuccessCopyWith<$Res> implements $HomeStateCopyWith<
   factory _$StateSuccessCopyWith(_StateSuccess value, $Res Function(_StateSuccess) _then) = __$StateSuccessCopyWithImpl;
 @useResult
 $Res call({
- List<VideoCategorySection> sections
+ List<CategorySection> categorySections, Map<int, Teacher> teachersById, Failure? actionFailure
 });
 
 
@@ -507,10 +587,12 @@ class __$StateSuccessCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? sections = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? categorySections = null,Object? teachersById = null,Object? actionFailure = freezed,}) {
   return _then(_StateSuccess(
-sections: null == sections ? _self._sections : sections // ignore: cast_nullable_to_non_nullable
-as List<VideoCategorySection>,
+categorySections: null == categorySections ? _self._categorySections : categorySections // ignore: cast_nullable_to_non_nullable
+as List<CategorySection>,teachersById: null == teachersById ? _self._teachersById : teachersById // ignore: cast_nullable_to_non_nullable
+as Map<int, Teacher>,actionFailure: freezed == actionFailure ? _self.actionFailure : actionFailure // ignore: cast_nullable_to_non_nullable
+as Failure?,
   ));
 }
 

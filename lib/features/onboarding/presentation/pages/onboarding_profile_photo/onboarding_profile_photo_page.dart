@@ -27,9 +27,9 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
         appBar: AppBar(),
         body: const Padding(
           padding: EdgeInsets.fromLTRB(
-            AppDimensions.pagePadding,
-            AppDimensions.pagePadding,
-            AppDimensions.pagePadding,
+            AppDimensions.p24,
+            AppDimensions.p24,
+            AppDimensions.p24,
             0,
           ),
           child: OnboardingProfilePhotoForm(),

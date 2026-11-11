@@ -11,11 +11,11 @@ enum AppThemeStatus {
   /// System theme.
   system;
 
-  /// Returns the display name for the current status.
+  /// Localization key for the current status (use with `.tr()`).
   String get displayName => switch (this) {
-    light => 'Light',
-    dark => 'Dark',
-    system => 'System',
+    light => 'light',
+    dark => 'dark',
+    system => 'system',
   };
 
   /// Returns the icon for the current status.

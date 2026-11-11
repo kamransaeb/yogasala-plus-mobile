@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:enterprise_core/enterprise_core.dart';
 import 'package:enterprise_logger/enterprise_logger.dart';
 import 'package:enterprise_network/enterprise_network.dart';
 import 'package:enterprise_storage/enterprise_storage.dart';
@@ -10,7 +11,6 @@ import 'package:injectable/injectable.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:yogasala_plus_mobile/core/constants/di_constants.dart';
 import 'package:yogasala_plus_mobile/core/constants/interceptor_constants.dart';
-import 'package:yogasala_plus_mobile/core/constants/storage_constants.dart';
 import 'package:yogasala_plus_mobile/core/network/hive_network_cache_store.dart';
 import 'package:yogasala_plus_mobile/di/injection.dart';
 import 'package:yogasala_plus_mobile/features/app/app_config.dart';
@@ -85,7 +85,6 @@ abstract class NetworkModule {
     NetworkClientConfig config,
     LoggerService logger,
     DeviceNetworkInfo deviceInfo,
-    @Named(DiConstants.secureStorage) LocalStorage secureStorage,
     NetworkCacheStore cacheStore,
   ) {
     final client = DioClient(
@@ -106,22 +105,16 @@ abstract class NetworkModule {
         AuthInterceptor(
           logger,
           () async {
-            final cached = await secureStorage.read<String>(
-              StorageConstants.accessToken,
-            );
-            if (cached != null && cached.isNotEmpty) return cached;
-            // Cold start / race: storage empty — refresh from Firebase.
-            final result = await getIt<AuthRepository>().refreshAuthTokens();
-            return result.fold(
-              (_) => null,
-              (tokens) =>
-                  tokens.accessToken.isEmpty ? null : tokens.accessToken,
-            );
+            final result = await getIt<AuthRepository>().getValidAccessToken();
+            return result.fold((_) => null, (token) => token);
           },
           () async {
             final result = await getIt<AuthRepository>().refreshAuthTokens();
             return result.fold(
-              (_) => null,
+              // Transient (offline) → throw to keep the session; else logout.
+              (failure) => failure is NetworkFailure
+                  ? throw const NoInternetConnectionException()
+                  : null,
               (tokens) =>
                   tokens.accessToken.isEmpty ? null : tokens.accessToken,
             );

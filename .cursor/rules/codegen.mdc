@@ -1,0 +1,26 @@
+---
+description: Which codegen tool to use for blocs, models, API, routes, DI
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Codegen
+
+| Surface | Tool | Part / output |
+|---------|------|----------------|
+| Bloc event/state | freezed | `part 'foo_bloc.freezed.dart'` |
+| API DTO | json_serializable | `part 'foo_model.g.dart'` |
+| API client | retrofit | `part 'foo_api_client.g.dart'` |
+| Routes | auto_route | `app_router.gr.dart` |
+| DI | injectable | `injection.config.dart` |
+
+## Rules
+
+- Freezed for blocs only — **not** for API DTOs
+- After adding `@injectable` / `@RoutePage` / models / Retrofit methods, run:
+
+```bash
+fvm dart run build_runner build --delete-conflicting-outputs
+```
+
+- Do not hand-edit `*.g.dart`, `*.freezed.dart`, `*.gr.dart`, or `injection.config.dart`

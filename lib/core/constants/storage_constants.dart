@@ -58,6 +58,29 @@ class StorageConstants {
   /// Cached TR store URL.
   static const String storeUrlTr = 'store_url_tr';
 
+  /// Cached badge level one threshold (from AppData).
+  static const String badgeLevelOne = 'badge_level_one';
+
+  /// Cached badge level two threshold (from AppData).
+  static const String badgeLevelTwo = 'badge_level_two';
+
+  /// Cached badge level three threshold (from AppData).
+  static const String badgeLevelThree = 'badge_level_three';
+
+  /// Cached KVKK privacy policy (English).
+  static const String kvkkPrivacyPolicyEn = 'kvkk_privacy_policy_en';
+
+  /// Cached KVKK privacy policy (Turkish).
+  static const String kvkkPrivacyPolicyTr = 'kvkk_privacy_policy_tr';
+
+  /// Cached user consent confirmation form (English).
+  static const String userConsentConfirmationFormEn =
+      'user_consent_confirmation_form_en';
+
+  /// Cached user consent confirmation form (Turkish).
+  static const String userConsentConfirmationFormTr =
+      'user_consent_confirmation_form_tr';
+
   /// Key for dark mode preference.
   static const String isDarkMode = 'is_dark_mode';
 

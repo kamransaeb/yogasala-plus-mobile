@@ -1,0 +1,35 @@
+---
+description: Pages, BLoCs, loading/error UI, routing, and i18n patterns
+globs: lib/features/**/presentation/**/*.dart
+alwaysApply: false
+---
+
+# Presentation
+
+## Pages & routing
+
+- `@RoutePage()` on pages; register in `app_router.dart` (`XPage` → `XRoute`)
+- Provide: `BlocProvider(create: (_) => getIt<XBloc>()..add(...))`
+- Main shell tabs use `maintainState: false` so revisit refetches
+
+## BLoC
+
+- Freezed events/states as parts of `*_bloc.dart`
+- States: `initial` / `loading` / `success` / `failure` + helpers (`isLoading`, `failureOrNull`)
+- `restartable()` for fetch; `droppable()` for purchase / join / one-shot actions
+
+## UI states
+
+- Buttons → always `AppButton` (`enterprise_ui`), never Material buttons directly (see `app-button` skill)
+- Loading → `AppLoadingIndicator`
+- Empty → localized empty string
+- Error → `FailureView(failure:, onRetry:)` (`core/widgets/feedback/`); pass `action:` to swap the retry button (e.g. subscribe)
+- Listener feedback → `AppFlushbar.showFailure` / `showError` / `showSuccess`; never build `Flushbar` directly
+- Backend codes the UI reacts to → constants in `lib/errors/backend_error_codes.dart`, checked via `ErrorMapper.requiresX(failure)` or `failure.code`; never compare raw strings or parse response bodies in features
+- `enterprise_ui` also exports an `AppErrorView` (different design); don't use it
+
+## i18n
+
+- Keys: snake_case in both `assets/lang/en.json` and `tr.json`
+- Use `'key'.tr()` / `.tr(args: [...])`
+- Backend error codes often match localization keys (e.g. `subscription_required`)

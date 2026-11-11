@@ -152,20 +152,12 @@ class _ResetPasswordButton extends StatelessWidget {
           style: theme.textTheme.bodySmall,
         ),
         AppSpacing.horizontalSpacing4,
-        TextButton(
-          key: const Key('loginForm_resetPassword_textButton'),
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.zero,
-            minimumSize: Size.zero,
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
+        AppButton(
+          padding: EdgeInsets.zero,
+          size: AppButtonSize.small,
+          label: 'reset'.tr(),
+          variant: AppButtonVariant.text,
           onPressed: () => context.router.push(const ResetPasswordRoute()),
-          child: Text(
-            'reset'.tr(),
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
         ),
       ],
     );

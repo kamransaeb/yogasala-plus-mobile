@@ -13,7 +13,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "YogaSala+, profil fotoğrafı seçebilmeniz için fotoğraf kitaplığına erişim ister."
+            "value" : "YogaSala+, profil fotoğrafı çekebilmeniz için kameraya erişim ister."
           }
         }
       }
@@ -30,7 +30,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "YogaSala+, profil fotoğrafı çekebilmeniz için kameraya erişim ister."
+            "value" : "YogaSala+, profil fotoğrafı seçebilmeniz için fotoğraf kitaplığına erişim ister."
           }
         }
       }

@@ -16,6 +16,9 @@ class AuthTokens {
   /// The expiration date of the tokens.
   final DateTime expiresAt;
 
-  /// Whether the tokens are expired.
-  bool get isExpired => DateTime.now().isAfter(expiresAt);
+  /// True when the access token is missing or within [skew] of expiry.
+  bool isExpired({Duration skew = const Duration(minutes: 2)}) {
+    if (accessToken.isEmpty) return true;
+    return !expiresAt.isAfter(DateTime.now().add(skew));
+  }
 }

@@ -35,6 +35,9 @@ AppDataModel _$AppDataModelFromJson(Map<String, dynamic> json) => AppDataModel(
   basketShippingNoFeeLimit: (json['basketShippingNoFeeLimit'] as num?)
       ?.toDouble(),
   basketItemCounterLimit: (json['basketItemCounterLimit'] as num?)?.toInt(),
+  badgeLevelOne: (json['badgeLevelOne'] as num?)?.toInt(),
+  badgeLevelTwo: (json['badgeLevelTwo'] as num?)?.toInt(),
+  badgeLevelThree: (json['badgeLevelThree'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$AppDataModelToJson(AppDataModel instance) =>
@@ -64,4 +67,7 @@ Map<String, dynamic> _$AppDataModelToJson(AppDataModel instance) =>
       'basketShippingFee': instance.basketShippingFee,
       'basketShippingNoFeeLimit': instance.basketShippingNoFeeLimit,
       'basketItemCounterLimit': instance.basketItemCounterLimit,
+      'badgeLevelOne': instance.badgeLevelOne,
+      'badgeLevelTwo': instance.badgeLevelTwo,
+      'badgeLevelThree': instance.badgeLevelThree,
     };

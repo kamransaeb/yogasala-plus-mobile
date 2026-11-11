@@ -24,6 +24,7 @@ class UserYogaSalaPlus implements EntityToModelMapper<UserYogaSalaPlusModel> {
     this.profileImageUrl,
     this.dateOfBirth,
     this.gender,
+    this.timeZone,
   });
 
   /// ID
@@ -80,6 +81,9 @@ class UserYogaSalaPlus implements EntityToModelMapper<UserYogaSalaPlusModel> {
   /// Gender
   final int? gender;
 
+  /// IANA time zone id (e.g. `Europe/Istanbul`).
+  final String? timeZone;
+
   /// Returns a copy of this entity with the given fields replaced.
   UserYogaSalaPlus copyWith({
     int? id,
@@ -100,6 +104,7 @@ class UserYogaSalaPlus implements EntityToModelMapper<UserYogaSalaPlusModel> {
     String? profileImageUrl,
     DateTime? dateOfBirth,
     int? gender,
+    String? timeZone,
     bool clearName = false,
     bool clearSurname = false,
     bool clearPersonalPhoneNumber = false,
@@ -109,6 +114,7 @@ class UserYogaSalaPlus implements EntityToModelMapper<UserYogaSalaPlusModel> {
     bool clearProfileImageUrl = false,
     bool clearDateOfBirth = false,
     bool clearGender = false,
+    bool clearTimeZone = false,
   }) {
     return UserYogaSalaPlus(
       id: id ?? this.id,
@@ -138,6 +144,7 @@ class UserYogaSalaPlus implements EntityToModelMapper<UserYogaSalaPlusModel> {
           : (profileImageUrl ?? this.profileImageUrl),
       dateOfBirth: clearDateOfBirth ? null : (dateOfBirth ?? this.dateOfBirth),
       gender: clearGender ? null : (gender ?? this.gender),
+      timeZone: clearTimeZone ? null : (timeZone ?? this.timeZone),
     );
   }
 
@@ -163,6 +170,7 @@ class UserYogaSalaPlus implements EntityToModelMapper<UserYogaSalaPlusModel> {
       profileImageUrl: profileImageUrl,
       dateOfBirth: dateOfBirth,
       gender: gender,
+      timeZone: timeZone,
     );
   }
 }

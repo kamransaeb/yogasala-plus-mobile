@@ -2,6 +2,7 @@ import 'package:enterprise_logger/enterprise_logger.dart';
 import 'package:injectable/injectable.dart';
 import 'package:yogasala_plus_mobile/features/profile/data/api/user_yoga_sala_plus_api_client.dart';
 import 'package:yogasala_plus_mobile/features/profile/data/datasources/user_yoga_sala_plus_remote_data_source.dart';
+import 'package:yogasala_plus_mobile/features/profile/data/models/update_time_zone_request_model.dart';
 import 'package:yogasala_plus_mobile/features/profile/data/models/user_yoga_sala_plus_model.dart';
 
 /// Remote data source implementation for user yoga sala plus.
@@ -14,18 +15,18 @@ class UserYogaSalaPlusRemoteDataSourceImpl
   final UserYogaSalaPlusApiClient _apiClient;
 
   @override
-  Future<UserYogaSalaPlusModel> getOrCreateUserYogaSalaPlusOpenMobile() async {
-    final resposne = await _apiClient.getOrCreateUserYogaSalaPlusOpenMobile();
-    return resposne.data;
-  }
-
-  @override
   Future<UserYogaSalaPlusModel> updateUserYogaSalaPlusMobileUser(
     UserYogaSalaPlusModel userYogaSalaPlusModel,
   ) async {
     final resposne = await _apiClient.updateUserYogaSalaPlusMobileUser(
       userYogaSalaPlusModel: userYogaSalaPlusModel,
     );
+    return resposne.data;
+  }
+
+  @override
+  Future<UserYogaSalaPlusModel> getOrCreateUserYogaSalaPlus() async {
+    final resposne = await _apiClient.getOrCreateUserYogaSalaPlus();
     return resposne.data;
   }
 
@@ -43,5 +44,13 @@ class UserYogaSalaPlusRemoteDataSourceImpl
   Future<UserYogaSalaPlusModel> getUserYogaSalaPlusMobileUser() async {
     final resposne = await _apiClient.getUserYogaSalaPlusMobileUser();
     return resposne.data;
+  }
+
+  @override
+  Future<UserYogaSalaPlusModel> updateUserTimeZone(String timeZone) async {
+    final response = await _apiClient.updateUserTimeZone(
+      body: UpdateTimeZoneRequestModel(timeZone: timeZone),
+    );
+    return response.data;
   }
 }

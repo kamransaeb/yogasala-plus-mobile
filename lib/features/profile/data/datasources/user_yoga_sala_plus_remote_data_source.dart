@@ -2,9 +2,6 @@ import 'package:yogasala_plus_mobile/features/profile/data/models/user_yoga_sala
 
 /// Remote data source for user yoga sala plus.
 abstract class UserYogaSalaPlusRemoteDataSource {
-  /// Get or create user yoga sala plus open mobile.
-  Future<UserYogaSalaPlusModel> getOrCreateUserYogaSalaPlusOpenMobile();
-
   /// Get user yoga sala plus mobile user.
   Future<UserYogaSalaPlusModel> getUserYogaSalaPlusMobileUser();
 
@@ -17,4 +14,10 @@ abstract class UserYogaSalaPlusRemoteDataSource {
   Future<UserYogaSalaPlusModel> completeUserYogaSalaPlusMobileUser(
     UserYogaSalaPlusModel userYogaSalaPlusModel,
   );
+
+  /// Get or create user yoga sala plus open mobile.
+  Future<UserYogaSalaPlusModel> getOrCreateUserYogaSalaPlus();
+
+  /// Update user IANA time zone.
+  Future<UserYogaSalaPlusModel> updateUserTimeZone(String timeZone);
 }

@@ -32,6 +32,7 @@ UserYogaSalaPlusModel _$UserYogaSalaPlusModelFromJson(
       ? null
       : DateTime.parse(json['dateOfBirth'] as String),
   gender: (json['gender'] as num?)?.toInt(),
+  timeZone: json['timeZone'] as String?,
 );
 
 Map<String, dynamic> _$UserYogaSalaPlusModelToJson(
@@ -57,6 +58,7 @@ Map<String, dynamic> _$UserYogaSalaPlusModelToJson(
   'profileImageUrl': instance.profileImageUrl,
   'dateOfBirth': instance.dateOfBirth?.toIso8601String(),
   'gender': instance.gender,
+  'timeZone': instance.timeZone,
 };
 
 const _$UserYogaSalaPlusAccountTypeEnumMap = {

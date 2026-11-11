@@ -1,5 +1,5 @@
-import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_tokens.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_tokens.dart';
 part 'auth_tokens_model.freezed.dart';
 part 'auth_tokens_model.g.dart';
 

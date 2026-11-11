@@ -5,8 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:enterprise_ui/enterprise_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yogasala_plus_mobile/core/constants/app_assets_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_dimensions.dart';
+import 'package:yogasala_plus_mobile/core/constants/app_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_spacing.dart';
 import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
 import 'package:yogasala_plus_mobile/core/widgets/svg_icon.dart';
@@ -60,7 +60,7 @@ class _GenderOptions extends StatelessWidget {
             Expanded(
               child: _GenderIconTile(
                 label: 'female'.tr(),
-                asset: AppAssetsIcons.genderFemale,
+                asset: AppIcons.genderFemale,
                 selected: gender == 1,
                 onTap: () => context.read<OnboardingGenderBloc>().add(
                   const OnboardingGenderEvent.genderChanged(1),
@@ -71,7 +71,7 @@ class _GenderOptions extends StatelessWidget {
             Expanded(
               child: _GenderIconTile(
                 label: 'male'.tr(),
-                asset: AppAssetsIcons.genderMale,
+                asset: AppIcons.genderMale,
                 selected: gender == 0,
                 onTap: () => context.read<OnboardingGenderBloc>().add(
                   const OnboardingGenderEvent.genderChanged(0),
@@ -121,12 +121,12 @@ class _GenderIconTile extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppDimensions.textFieldBorderRadius),
+      borderRadius: BorderRadius.circular(AppDimensions.halfBorderRadius),
       child: Container(
-        padding: const EdgeInsets.all(AppDimensions.contentPadding),
+        padding: const EdgeInsets.all(AppDimensions.p16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
-            AppDimensions.textFieldBorderRadius,
+            AppDimensions.halfBorderRadius,
           ),
           border: Border.all(
             color: borderColor,
@@ -174,7 +174,7 @@ class _NextButton extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: AppDimensions.pagePadding),
+        padding: const EdgeInsets.only(bottom: AppDimensions.p24),
         child: AppButton(
           size: AppButtonSize.large,
           label: 'next'.tr(),

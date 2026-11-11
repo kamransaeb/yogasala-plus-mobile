@@ -1,9 +1,9 @@
 import 'package:enterprise_ui/enterprise_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:yogasala_plus_mobile/core/constants/app_assets_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_colors.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_dimensions.dart';
+import 'package:yogasala_plus_mobile/core/constants/app_icons.dart';
 import 'package:yogasala_plus_mobile/core/widgets/svg_icon.dart';
 
 /// App-specific ThemeData on top of shared [AppTheme].
@@ -25,6 +25,8 @@ abstract final class BrandTheme {
     var scheme = base.colorScheme.copyWith(
       primary: AppColors.primary,
       onPrimary: AppColors.white,
+      error: AppColors.red,
+      onError: AppColors.white,
       secondaryContainer: AppColors.orange4, // light orange wash
       onSecondaryContainer: AppColors.primary, // or darker text
     );
@@ -71,7 +73,34 @@ abstract final class BrandTheme {
     );
 
     return base.copyWith(
+      canvasColor: scheme.surface, // kill orange menu panel
+      focusColor: scheme.surfaceContainerHigh,
+      splashColor: scheme.surfaceContainerHigh,
+      hoverColor: scheme.surfaceContainerHigh,
       shadowColor: isDark ? AppColors.grey1 : Colors.black,
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: isDark ? AppColors.black : AppColors.white,
+        selectedIconTheme: const IconThemeData(color: AppColors.primary),
+        selectedLabelTextStyle: const TextStyle(
+          color: AppColors.primary,
+          fontWeight: FontWeight.w600,
+        ),
+        indicatorColor: AppColors.primary.withValues(alpha: 0.12),
+      ),
+      cardTheme: CardThemeData(
+        elevation: 0,
+        color: scheme.surfaceBright,
+      ),
+      dataTableTheme: DataTableThemeData(
+        headingRowColor: WidgetStatePropertyAll(
+          scheme.surfaceContainerHigh,
+        ),
+        headingTextStyle: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: scheme.onSurface,
+        ),
+      ),
+
       cupertinoOverrideTheme: CupertinoThemeData(
         brightness: base.brightness,
         primaryColor: scheme.primary,
@@ -82,10 +111,62 @@ abstract final class BrandTheme {
               ),
         ),
       ),
-
+      dropdownMenuTheme: DropdownMenuThemeData(
+        inputDecorationTheme: InputDecorationThemeData(
+          filled: true,
+          fillColor: scheme.surfaceContainerHigh,
+          // Match OutlinedButton side color (colorScheme.outline).
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              AppDimensions.fullBorderRadius,
+            ),
+            borderSide: BorderSide(
+              color: scheme.outline,
+              width: AppDimensions.borderLineWidth,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              AppDimensions.fullBorderRadius,
+            ),
+            borderSide: BorderSide(
+              color: scheme.outline,
+              width: AppDimensions.borderLineWidth,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              AppDimensions.fullBorderRadius,
+            ),
+            borderSide: BorderSide(
+              color: scheme.primary,
+              width: AppDimensions.borderLineWidth * 2,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              AppDimensions.fullBorderRadius,
+            ),
+            borderSide: BorderSide(
+              color: scheme.error,
+              width: AppDimensions.borderLineWidth,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              AppDimensions.fullBorderRadius,
+            ),
+            borderSide: BorderSide(
+              color: scheme.error,
+              width: AppDimensions.borderLineWidth * 2,
+            ),
+          ),
+        ),
+      ),
       listTileTheme: ListTileThemeData(
         iconColor: isDark ? AppColors.white : AppColors.icon,
         textColor: isDark ? AppColors.white : AppColors.text,
+        selectedTileColor: scheme.surfaceContainerHigh,
       ),
       colorScheme: scheme,
       scaffoldBackgroundColor: isDark ? AppColors.black : AppColors.white,
@@ -112,7 +193,7 @@ abstract final class BrandTheme {
       // No surfaceTint — seed tint is orange and washes the bar.
       actionIconTheme: ActionIconThemeData(
         backButtonIconBuilder: (context) => const SvgIcon(
-          asset: AppAssetsIcons.arrowLeft, // your back asset
+          asset: AppIcons.arrowLeft, // your back asset
         ),
         // or: Icon(Icons.arrow_back_ios_new),
       ),
@@ -138,7 +219,7 @@ abstract final class BrandTheme {
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
-            AppDimensions.circularBorderRadius,
+            AppDimensions.dialogBorderRadius,
           ),
         ),
       ),
@@ -148,10 +229,46 @@ abstract final class BrandTheme {
       chipTheme: ChipThemeData(
         backgroundColor: scheme.surfaceContainerHigh,
         selectedColor: scheme.primary,
-        checkmarkColor: scheme.onPrimary,
+        showCheckmark: false,
         surfaceTintColor: Colors.transparent,
-        labelStyle: TextStyle(color: scheme.onSurface),
-        secondaryLabelStyle: TextStyle(color: scheme.onPrimary),
+        labelStyle: TextStyle(
+          color: WidgetStateColor.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return scheme.primary;
+            }
+            if (states.contains(WidgetState.selected)) {
+              return scheme.onPrimary;
+            }
+
+            return scheme.onSurface;
+          }),
+        ),
+        secondaryLabelStyle: TextStyle(
+          color: WidgetStateColor.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return scheme.primary;
+            }
+            if (states.contains(WidgetState.selected)) {
+              return scheme.onPrimary;
+            }
+            return scheme.onSurface;
+          }),
+        ),
+
+        side: WidgetStateBorderSide.resolveWith((states) {
+          final highlighted =
+              states.contains(WidgetState.selected) ||
+              states.contains(WidgetState.hovered);
+          return BorderSide(
+            color: highlighted ? scheme.primary : scheme.outline,
+            width: AppDimensions.borderLineWidth,
+          );
+        }),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            AppDimensions.fullBorderRadius,
+          ),
+        ),
       ),
       inputDecorationTheme: base.inputDecorationTheme.copyWith(
         filled: true,
@@ -159,7 +276,7 @@ abstract final class BrandTheme {
         // Match OutlinedButton side color (colorScheme.outline).
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
-            AppDimensions.textFieldBorderRadius,
+            AppDimensions.fullBorderRadius,
           ),
           borderSide: BorderSide(
             color: scheme.outline,
@@ -168,7 +285,7 @@ abstract final class BrandTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
-            AppDimensions.textFieldBorderRadius,
+            AppDimensions.fullBorderRadius,
           ),
           borderSide: BorderSide(
             color: scheme.outline,
@@ -177,7 +294,7 @@ abstract final class BrandTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
-            AppDimensions.textFieldBorderRadius,
+            AppDimensions.fullBorderRadius,
           ),
           borderSide: BorderSide(
             color: scheme.primary,
@@ -186,7 +303,7 @@ abstract final class BrandTheme {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
-            AppDimensions.textFieldBorderRadius,
+            AppDimensions.fullBorderRadius,
           ),
           borderSide: BorderSide(
             color: scheme.error,
@@ -195,7 +312,7 @@ abstract final class BrandTheme {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(
-            AppDimensions.textFieldBorderRadius,
+            AppDimensions.fullBorderRadius,
           ),
           borderSide: BorderSide(
             color: scheme.error,
@@ -203,19 +320,31 @@ abstract final class BrandTheme {
           ),
         ),
       ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          textStyle: _textTheme.titleMedium,
+          foregroundColor: scheme.primary,
+          disabledForegroundColor: scheme.onSurfaceVariant,
+          overlayColor: scheme.onSurface,
+        ),
+      ),
       filledButtonTheme: FilledButtonThemeData(
-        style: (base.filledButtonTheme.style ?? const ButtonStyle()).merge(
-          FilledButton.styleFrom(
-            disabledBackgroundColor: scheme.surfaceContainerHigh,
-            disabledForegroundColor: scheme.surfaceContainerLowest,
-          ),
+        style: FilledButton.styleFrom(
+          textStyle: _textTheme.titleMedium,
+          foregroundColor: scheme.onPrimary,
+          disabledBackgroundColor: scheme.surfaceContainerHigh,
+          disabledForegroundColor: scheme.surfaceContainerLowest,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
+          textStyle: _textTheme.titleMedium,
           foregroundColor: scheme.primary, // text/icon
           disabledForegroundColor: scheme.surfaceContainerLowest,
-          side: BorderSide(color: scheme.outline),
+          side: BorderSide(
+            color: scheme.outline,
+            width: AppDimensions.borderLineWidth,
+          ),
         ),
       ),
     );
@@ -224,61 +353,61 @@ abstract final class BrandTheme {
   /// Typography only — colors come from [ColorScheme] in [_applyBrand].
   static const TextTheme _textTheme = TextTheme(
     titleSmall: TextStyle(
-      fontSize: 13,
-      fontWeight: FontWeight.bold,
-      fontFamily: 'Montserrat-Medium',
+      fontSize: 11,
+      //  fontWeight: FontWeight.bold,
+      fontFamily: 'Roboto-700',
     ),
     titleMedium: TextStyle(
-      fontSize: 15,
-      fontFamily: 'Montserrat-Medium',
-      fontWeight: FontWeight.bold,
+      fontSize: 13,
+      fontFamily: 'Roboto-700',
+      // fontWeight: FontWeight.bold,
     ),
     titleLarge: TextStyle(
-      fontSize: 17,
-      fontFamily: 'Montserrat-Medium',
-      fontWeight: FontWeight.bold,
+      fontSize: 15,
+      fontFamily: 'Roboto-700',
+      //  fontWeight: FontWeight.bold,
     ),
     bodySmall: TextStyle(
-      fontSize: 13,
-      fontFamily: 'Montserrat-Regular',
+      fontSize: 11,
+      fontFamily: 'Roboto-400',
     ),
     bodyMedium: TextStyle(
-      fontSize: 15,
-      fontFamily: 'Montserrat-Regular',
+      fontSize: 13,
+      fontFamily: 'Roboto-400',
     ),
     bodyLarge: TextStyle(
-      fontSize: 17,
-      fontFamily: 'Montserrat-Regular',
+      fontSize: 15,
+      fontFamily: 'Roboto-400',
     ),
     headlineSmall: TextStyle(
-      fontSize: 19,
-      fontFamily: 'Montserrat-Medium',
-      fontWeight: FontWeight.bold,
+      fontSize: 17,
+      fontFamily: 'Roboto-700',
+      // fontWeight: FontWeight.bold,
     ),
     headlineMedium: TextStyle(
-      fontSize: 21,
-      fontFamily: 'Montserrat-Medium',
-      fontWeight: FontWeight.bold,
+      fontSize: 19,
+      fontFamily: 'Roboto-700',
+      // fontWeight: FontWeight.bold,
     ),
     headlineLarge: TextStyle(
-      fontSize: 23,
-      fontFamily: 'Montserrat-Medium',
-      fontWeight: FontWeight.bold,
+      fontSize: 21,
+      fontFamily: 'Roboto-700',
+      // fontWeight: FontWeight.bold,
     ),
     labelSmall: TextStyle(
-      fontSize: 11,
-      fontFamily: 'Montserrat-Regular',
-      fontWeight: FontWeight.bold,
+      fontSize: 9,
+      fontFamily: 'Roboto-700',
+      // fontWeight: FontWeight.bold,
     ),
     labelMedium: TextStyle(
-      fontSize: 13,
-      fontFamily: 'Montserrat-Regular',
-      fontWeight: FontWeight.bold,
+      fontSize: 11,
+      fontFamily: 'Roboto-700',
+      //fontWeight: FontWeight.bold,
     ),
     labelLarge: TextStyle(
-      fontSize: 15,
-      fontFamily: 'Montserrat-Regular',
-      fontWeight: FontWeight.bold,
+      fontSize: 13,
+      fontFamily: 'Roboto-700',
+      // fontWeight: FontWeight.bold,
     ),
   );
 }

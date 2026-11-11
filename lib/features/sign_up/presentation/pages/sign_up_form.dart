@@ -159,20 +159,12 @@ class _LoginLink extends StatelessWidget {
           style: theme.textTheme.bodySmall,
         ),
         AppSpacing.horizontalSpacing4,
-        TextButton(
-          key: const Key('signUpForm_login_textButton'),
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.zero,
-            minimumSize: Size.zero,
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
+        AppButton(
+          padding: EdgeInsets.zero,
+          size: AppButtonSize.small,
+          label: 'login'.tr(),
+          variant: AppButtonVariant.text,
           onPressed: () => context.router.maybePop(),
-          child: Text(
-            'login'.tr(),
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
         ),
       ],
     );

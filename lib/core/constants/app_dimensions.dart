@@ -9,7 +9,7 @@ class AppDimensions {
   AppDimensions._();
 
   /// Base padding for the app.
-  static const basePadding = 8.0;
+  // static const basePadding = 8.0;
 
   /// Bottom sheet middle line width.
   static const bottomSheetMiddleLineWidth = 100.0;
@@ -24,13 +24,16 @@ class AppDimensions {
   static const circularProgressIndicatorStrokeWidth = 2.0;
 
   /// Shared corner radius for surfaces, buttons, and fields.
-  static const borderRadius = 12.0;
+  static const fullBorderRadius = 12.0;
 
   /// Text field border radius.
-  static const textFieldBorderRadius = 12.0;
+  static const halfBorderRadius = 6.0;
 
   /// Circular border radius.
   static const circularBorderRadius = 50.0;
+
+  /// Dialog border radius.
+  static const dialogBorderRadius = 24.0;
 
   /// Full circular border radius.
   static const fullCircularBorderRadius = 200.0;
@@ -48,13 +51,13 @@ class AppDimensions {
   static const iconSizeLarge = 25.0;
 
   /// Icon size extra large.
-  static const iconSizeExtraLarge = 40.0;
+  static const iconSizeExtraLarge = 35.0;
 
   /// Icon size extra extra large.
-  static const iconSizeExtraExtraLarge = 65.0;
+  static const iconSizeExtraExtraLarge = 60.0;
 
   /// Icon size extra extra extra large.
-  static const iconSizeExtraExtraExtraLarge = 90.0;
+  static const iconSizeExtraExtraExtraLarge = 110.0;
 
   /// Profile photo size.
   static const profilePhotoSize = 90.0;
@@ -65,20 +68,53 @@ class AppDimensions {
   /// Title tile size.
   static const titleTileSize = 35.0;
 
-  /// Page padding.
-  static const pagePadding = 24.0;
+  // /// Page padding.
+  // static const pagePadding = 24.0;
 
-  /// Content padding.
-  static const contentPadding = 16.0;
+  // /// Page padding.
+  // static const pagePadding = 24.0;
+
+  // /// Content padding.
+  // static const contentPadding = 16.0;
+
+  // /// Icon padding.
+  // static const iconPadding = 4.0;
+
+  /// Home series card width as a fraction of screen width.
+  static const double homeSerieCardWidthFactor = 2 / 3;
+
+  /// Home series card media aspect ratio (width : height).
+  static const double homeSerieCardAspectRatio = 16 / 9;
 
   /// Divider padding.
   static const dividerPadding = 28.0;
 
+  /// Divider thickness.
+  static const dividerSizeLarge = 4.0;
+
+  /// Divider thickness.
+  static const dividerSizeMedium = 2.0;
+
+  /// Divider thickness.
+  static const dividerSizeSmall = 1.2;
+
   /// Profile cover height.
   static const profileCoverHeight = 200.0;
 
-  /// Profile avatar height and width.
-  static const profileAvatarHeightAndWidth = 140.0;
+  /// Profile avatar height and width large.
+  static const profileAvatarSizeLarge = 100.0;
+
+  /// Profile avatar height and width medium.
+  static const profileAvatarSizeMedium = 70.0;
+
+  /// Profile avatar height and width small.
+  static const profileAvatarSizeSmall = 40.0;
+
+  // /// Large avatar size.
+  // static const largeAvatarSize = 130.0;
+
+  /// Image size for tile lists.
+  static const tileListImageSize = 64.0;
 
   /// Border line width.
   static const borderLineWidth = 1.2;
@@ -89,9 +125,6 @@ class AppDimensions {
   /// My app bar toolbar item underline width.
   static const myAppBarToolbarItemUnderlineWidth = 2.0;
 
-  /// Large avatar size.
-  static const largeAvatarSize = 130.0;
-
   /// Bottom sheet transition duration.
   static const bottomSheetTransitionDuration = 300; // it should be int
   /// P2.
@@ -99,6 +132,9 @@ class AppDimensions {
 
   /// P4.
   static const p4 = 4.0;
+
+  /// P6.
+  static const p6 = 6.0;
 
   /// P8.
   static const p8 = 8.0;

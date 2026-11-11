@@ -4,8 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:yogasala_plus_mobile/core/constants/app_assets_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_dimensions.dart';
+import 'package:yogasala_plus_mobile/core/constants/app_icons.dart';
 
 /// Shows a non-dismissible force-update dialog using store URLs from AppBloc.
 ///
@@ -37,9 +37,9 @@ Future<void> showUpdateAppDialog(
 
 String _storeBadgeAsset({required bool isTr}) {
   if (Platform.isIOS) {
-    return isTr ? AppAssetsIcons.appStoreTr : AppAssetsIcons.appStoreEn;
+    return isTr ? AppIcons.appStoreTr : AppIcons.appStoreEn;
   }
-  return isTr ? AppAssetsIcons.googlePlayTr : AppAssetsIcons.googlePlayEn;
+  return isTr ? AppIcons.googlePlayTr : AppIcons.googlePlayEn;
 }
 
 /// Stateless force-update dialog (title, store badge, message).
@@ -75,7 +75,7 @@ class UpdateAppDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final width = MediaQuery.sizeOf(context).width;
-    const padding = AppDimensions.pagePadding;
+    const padding = AppDimensions.p24;
 
     // Full-width card; colors/shape from [BrandTheme.dialogTheme].
     return AlertDialog(

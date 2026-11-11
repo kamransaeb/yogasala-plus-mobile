@@ -5,6 +5,7 @@ import 'package:enterprise_network/enterprise_network.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:yogasala_plus_mobile/features/profile/data/api/user_yoga_sala_plus_endpoints.dart';
+import 'package:yogasala_plus_mobile/features/profile/data/models/update_time_zone_request_model.dart';
 import 'package:yogasala_plus_mobile/features/profile/data/models/user_yoga_sala_plus_model.dart';
 
 part 'user_yoga_sala_plus_api_client.g.dart';
@@ -19,10 +20,9 @@ abstract class UserYogaSalaPlusApiClient {
       _UserYogaSalaPlusApiClient(dioClient.dio);
 
   /// Get or create open-mobile profile (requires Firebase id token).
-  @GET(UserYogaSalaPlusEndpoints.getOrCreateUserYogaSalaPlusOpenMobile)
+  @GET(UserYogaSalaPlusEndpoints.getOrCreateUserYogaSalaPlus)
   @Extra({NetworkConstants.forceRefreshExtraKey: true})
-  Future<HttpResponse<UserYogaSalaPlusModel>>
-  getOrCreateUserYogaSalaPlusOpenMobile();
+  Future<HttpResponse<UserYogaSalaPlusModel>> getOrCreateUserYogaSalaPlus();
 
   /// Get mobile client profile (requires Firebase id token).
   @GET(UserYogaSalaPlusEndpoints.getUserYogaSalaPlusMobileUser)
@@ -31,14 +31,23 @@ abstract class UserYogaSalaPlusApiClient {
 
   /// Update user yoga sala plus mobile client
   @PUT(UserYogaSalaPlusEndpoints.updateUserYogaSalaPlusMobileUser)
+  @Extra({NetworkConstants.forceRefreshExtraKey: true})
   Future<HttpResponse<UserYogaSalaPlusModel>> updateUserYogaSalaPlusMobileUser({
     @Body() required UserYogaSalaPlusModel userYogaSalaPlusModel,
   });
 
   /// Complete user yoga sala plus mobile client
   @PUT(UserYogaSalaPlusEndpoints.completeUserYogaSalaPlusMobileUser)
+  @Extra({NetworkConstants.forceRefreshExtraKey: true})
   Future<HttpResponse<UserYogaSalaPlusModel>>
   completeUserYogaSalaPlusMobileUser({
     @Body() required UserYogaSalaPlusModel userYogaSalaPlusModel,
+  });
+
+  /// Update the user's IANA time zone.
+  @PUT(UserYogaSalaPlusEndpoints.updateUserTimeZone)
+  @Extra({NetworkConstants.forceRefreshExtraKey: true})
+  Future<HttpResponse<UserYogaSalaPlusModel>> updateUserTimeZone({
+    @Body() required UpdateTimeZoneRequestModel body,
   });
 }

@@ -21,7 +21,7 @@ class _UserYogaSalaPlusApiClient implements UserYogaSalaPlusApiClient {
 
   @override
   Future<HttpResponse<UserYogaSalaPlusModel>>
-  getOrCreateUserYogaSalaPlusOpenMobile() async {
+  getOrCreateUserYogaSalaPlus() async {
     final _extra = <String, dynamic>{'force_refresh': true};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -30,7 +30,7 @@ class _UserYogaSalaPlusApiClient implements UserYogaSalaPlusApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/open/mobile/user-yoga-sala-plus/get-or-create',
+            '/open/mobile/get-or-create-user-yoga-sala-plus',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -81,7 +81,7 @@ class _UserYogaSalaPlusApiClient implements UserYogaSalaPlusApiClient {
   Future<HttpResponse<UserYogaSalaPlusModel>> updateUserYogaSalaPlusMobileUser({
     required UserYogaSalaPlusModel userYogaSalaPlusModel,
   }) async {
-    final _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{'force_refresh': true};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -113,7 +113,7 @@ class _UserYogaSalaPlusApiClient implements UserYogaSalaPlusApiClient {
   completeUserYogaSalaPlusMobileUser({
     required UserYogaSalaPlusModel userYogaSalaPlusModel,
   }) async {
-    final _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{'force_refresh': true};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -123,6 +123,37 @@ class _UserYogaSalaPlusApiClient implements UserYogaSalaPlusApiClient {
           .compose(
             _dio.options,
             '/mobile/user/user-yoga-sala-plus/complete',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UserYogaSalaPlusModel _value;
+    try {
+      _value = UserYogaSalaPlusModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<UserYogaSalaPlusModel>> updateUserTimeZone({
+    required UpdateTimeZoneRequestModel body,
+  }) async {
+    final _extra = <String, dynamic>{'force_refresh': true};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<HttpResponse<UserYogaSalaPlusModel>>(
+      Options(method: 'PUT', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/mobile/user/user-yoga-sala-plus/time-zone',
             queryParameters: queryParameters,
             data: _data,
           )

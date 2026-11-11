@@ -30,6 +30,9 @@ class AppData implements EntityToModelMapper<AppDataModel> {
     this.basketShippingFee,
     this.basketShippingNoFeeLimit,
     this.basketItemCounterLimit,
+    this.badgeLevelOne,
+    this.badgeLevelTwo,
+    this.badgeLevelThree,
   });
 
   /// App data row id (platform-specific in callers).
@@ -107,6 +110,15 @@ class AppData implements EntityToModelMapper<AppDataModel> {
   /// Max quantity per basket line item.
   final int? basketItemCounterLimit;
 
+  /// Points threshold for badge level one.
+  final int? badgeLevelOne;
+
+  /// Points threshold for badge level two.
+  final int? badgeLevelTwo;
+
+  /// Points threshold for badge level three.
+  final int? badgeLevelThree;
+
   @override
   AppDataModel toModel() => AppDataModel(
     id: id,
@@ -134,5 +146,8 @@ class AppData implements EntityToModelMapper<AppDataModel> {
     basketShippingFee: basketShippingFee,
     basketShippingNoFeeLimit: basketShippingNoFeeLimit,
     basketItemCounterLimit: basketItemCounterLimit,
+    badgeLevelOne: badgeLevelOne,
+    badgeLevelTwo: badgeLevelTwo,
+    badgeLevelThree: badgeLevelThree,
   );
 }

@@ -26,13 +26,13 @@ class OnboardingDateOfBirthPage extends StatelessWidget {
             ..add(OnboardingDateOfBirthEvent.fetched(userYogaSalaPlus)),
       child: Scaffold(
         appBar: AppBar(
-          actions: const [LocaleButtons(), ThemeToggleButton()],
+          actions: const [],
         ),
         body: const Padding(
           padding: EdgeInsets.fromLTRB(
-            AppDimensions.pagePadding,
-            AppDimensions.pagePadding,
-            AppDimensions.pagePadding,
+            AppDimensions.p24,
+            AppDimensions.p24,
+            AppDimensions.p24,
             0,
           ),
           child: OnboardingDateOfBirthForm(),

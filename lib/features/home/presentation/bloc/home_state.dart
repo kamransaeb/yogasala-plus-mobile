@@ -13,7 +13,9 @@ abstract class HomeState with _$HomeState {
 
   /// Feed loaded.
   const factory HomeState.success({
-    @Default(<VideoCategorySection>[]) List<VideoCategorySection> sections,
+    @Default(<CategorySection>[]) List<CategorySection> categorySections,
+    @Default(<int, Teacher>{}) Map<int, Teacher> teachersById,
+    Failure? actionFailure,
   }) = _StateSuccess;
 
   /// Fetch failed.
@@ -32,13 +34,25 @@ abstract class HomeState with _$HomeState {
 
   /// Failure when in failure state.
   Failure? get failureOrNull => maybeMap(
-        failure: (s) => s.failure,
-        orElse: () => null,
-      );
+    failure: (s) => s.failure,
+    orElse: () => null,
+  );
+
+  /// Load-more action failure when success (for flushbar).
+  Failure? get actionFailureOrNull => maybeMap(
+    success: (s) => s.actionFailure,
+    orElse: () => null,
+  );
 
   /// Sections when in success state.
-  List<VideoCategorySection> get sectionsOrEmpty => maybeMap(
-        success: (s) => s.sections,
-        orElse: () => const [],
-      );
+  List<CategorySection> get categorySectionsOrEmpty => maybeMap(
+    success: (s) => s.categorySections,
+    orElse: () => const [],
+  );
+
+  /// Teachers keyed by id when in success state.
+  Map<int, Teacher> get teachersByIdOrEmpty => maybeMap(
+    success: (s) => s.teachersById,
+    orElse: () => const {},
+  );
 }

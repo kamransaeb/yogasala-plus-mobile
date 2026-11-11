@@ -113,11 +113,11 @@ class _ScrollableTextBox extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.3,
-      padding: const EdgeInsets.all(AppDimensions.contentPadding),
+      padding: const EdgeInsets.all(AppDimensions.p16),
       decoration: BoxDecoration(
         border: Border.all(color: theme.colorScheme.outline),
         borderRadius: BorderRadius.circular(
-          AppDimensions.textFieldBorderRadius,
+          AppDimensions.halfBorderRadius,
         ),
       ),
       child: SingleChildScrollView(
@@ -151,7 +151,7 @@ class _CompleteButton extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: AppDimensions.pagePadding),
+        padding: const EdgeInsets.only(bottom: AppDimensions.p24),
         child: submitting
             ? const AppLoadingIndicator()
             : AppButton(

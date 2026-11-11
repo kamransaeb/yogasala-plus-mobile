@@ -16,7 +16,7 @@ class OnboardingProgress extends StatelessWidget {
     return LinearProgressIndicator(
       value: percent.clamp(0.0, 1.0),
       minHeight: 4,
-      borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
+      borderRadius: BorderRadius.circular(AppDimensions.fullBorderRadius),
       backgroundColor: theme.colorScheme.surfaceContainerHigh,
       color: theme.colorScheme.primary,
     );

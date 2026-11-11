@@ -392,7 +392,7 @@ String toString() {
 /// @nodoc
 mixin _$OnboardingProfilePhotoState {
 
- UserYogaSalaPlus? get user; Uint8List? get imageBytes; FormzSubmissionStatus get status;
+ UserYogaSalaPlus? get user; Uint8List? get imageBytes; FormzSubmissionStatus get status; Failure? get failure;
 /// Create a copy of OnboardingProfilePhotoState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -403,16 +403,16 @@ $OnboardingProfilePhotoStateCopyWith<OnboardingProfilePhotoState> get copyWith =
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnboardingProfilePhotoState&&(identical(other.user, user) || other.user == user)&&const DeepCollectionEquality().equals(other.imageBytes, imageBytes)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnboardingProfilePhotoState&&(identical(other.user, user) || other.user == user)&&const DeepCollectionEquality().equals(other.imageBytes, imageBytes)&&(identical(other.status, status) || other.status == status)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,const DeepCollectionEquality().hash(imageBytes),status);
+int get hashCode => Object.hash(runtimeType,user,const DeepCollectionEquality().hash(imageBytes),status,failure);
 
 @override
 String toString() {
-  return 'OnboardingProfilePhotoState(user: $user, imageBytes: $imageBytes, status: $status)';
+  return 'OnboardingProfilePhotoState(user: $user, imageBytes: $imageBytes, status: $status, failure: $failure)';
 }
 
 
@@ -423,7 +423,7 @@ abstract mixin class $OnboardingProfilePhotoStateCopyWith<$Res>  {
   factory $OnboardingProfilePhotoStateCopyWith(OnboardingProfilePhotoState value, $Res Function(OnboardingProfilePhotoState) _then) = _$OnboardingProfilePhotoStateCopyWithImpl;
 @useResult
 $Res call({
- UserYogaSalaPlus? user, Uint8List? imageBytes, FormzSubmissionStatus status
+ UserYogaSalaPlus? user, Uint8List? imageBytes, FormzSubmissionStatus status, Failure? failure
 });
 
 
@@ -440,12 +440,13 @@ class _$OnboardingProfilePhotoStateCopyWithImpl<$Res>
 
 /// Create a copy of OnboardingProfilePhotoState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? imageBytes = freezed,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? imageBytes = freezed,Object? status = null,Object? failure = freezed,}) {
   return _then(_self.copyWith(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserYogaSalaPlus?,imageBytes: freezed == imageBytes ? _self.imageBytes : imageBytes // ignore: cast_nullable_to_non_nullable
 as Uint8List?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as FormzSubmissionStatus,
+as FormzSubmissionStatus,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as Failure?,
   ));
 }
 
@@ -530,10 +531,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserYogaSalaPlus? user,  Uint8List? imageBytes,  FormzSubmissionStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserYogaSalaPlus? user,  Uint8List? imageBytes,  FormzSubmissionStatus status,  Failure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OnboardingProfilePhotoState() when $default != null:
-return $default(_that.user,_that.imageBytes,_that.status);case _:
+return $default(_that.user,_that.imageBytes,_that.status,_that.failure);case _:
   return orElse();
 
 }
@@ -551,10 +552,10 @@ return $default(_that.user,_that.imageBytes,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserYogaSalaPlus? user,  Uint8List? imageBytes,  FormzSubmissionStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserYogaSalaPlus? user,  Uint8List? imageBytes,  FormzSubmissionStatus status,  Failure? failure)  $default,) {final _that = this;
 switch (_that) {
 case _OnboardingProfilePhotoState():
-return $default(_that.user,_that.imageBytes,_that.status);case _:
+return $default(_that.user,_that.imageBytes,_that.status,_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -571,10 +572,10 @@ return $default(_that.user,_that.imageBytes,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserYogaSalaPlus? user,  Uint8List? imageBytes,  FormzSubmissionStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserYogaSalaPlus? user,  Uint8List? imageBytes,  FormzSubmissionStatus status,  Failure? failure)?  $default,) {final _that = this;
 switch (_that) {
 case _OnboardingProfilePhotoState() when $default != null:
-return $default(_that.user,_that.imageBytes,_that.status);case _:
+return $default(_that.user,_that.imageBytes,_that.status,_that.failure);case _:
   return null;
 
 }
@@ -586,12 +587,13 @@ return $default(_that.user,_that.imageBytes,_that.status);case _:
 
 
 class _OnboardingProfilePhotoState implements OnboardingProfilePhotoState {
-  const _OnboardingProfilePhotoState({this.user, this.imageBytes, this.status = FormzSubmissionStatus.initial});
+  const _OnboardingProfilePhotoState({this.user, this.imageBytes, this.status = FormzSubmissionStatus.initial, this.failure});
   
 
 @override final  UserYogaSalaPlus? user;
 @override final  Uint8List? imageBytes;
 @override@JsonKey() final  FormzSubmissionStatus status;
+@override final  Failure? failure;
 
 /// Create a copy of OnboardingProfilePhotoState
 /// with the given fields replaced by the non-null parameter values.
@@ -603,16 +605,16 @@ _$OnboardingProfilePhotoStateCopyWith<_OnboardingProfilePhotoState> get copyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnboardingProfilePhotoState&&(identical(other.user, user) || other.user == user)&&const DeepCollectionEquality().equals(other.imageBytes, imageBytes)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OnboardingProfilePhotoState&&(identical(other.user, user) || other.user == user)&&const DeepCollectionEquality().equals(other.imageBytes, imageBytes)&&(identical(other.status, status) || other.status == status)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,const DeepCollectionEquality().hash(imageBytes),status);
+int get hashCode => Object.hash(runtimeType,user,const DeepCollectionEquality().hash(imageBytes),status,failure);
 
 @override
 String toString() {
-  return 'OnboardingProfilePhotoState(user: $user, imageBytes: $imageBytes, status: $status)';
+  return 'OnboardingProfilePhotoState(user: $user, imageBytes: $imageBytes, status: $status, failure: $failure)';
 }
 
 
@@ -623,7 +625,7 @@ abstract mixin class _$OnboardingProfilePhotoStateCopyWith<$Res> implements $Onb
   factory _$OnboardingProfilePhotoStateCopyWith(_OnboardingProfilePhotoState value, $Res Function(_OnboardingProfilePhotoState) _then) = __$OnboardingProfilePhotoStateCopyWithImpl;
 @override @useResult
 $Res call({
- UserYogaSalaPlus? user, Uint8List? imageBytes, FormzSubmissionStatus status
+ UserYogaSalaPlus? user, Uint8List? imageBytes, FormzSubmissionStatus status, Failure? failure
 });
 
 
@@ -640,12 +642,13 @@ class __$OnboardingProfilePhotoStateCopyWithImpl<$Res>
 
 /// Create a copy of OnboardingProfilePhotoState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? imageBytes = freezed,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? imageBytes = freezed,Object? status = null,Object? failure = freezed,}) {
   return _then(_OnboardingProfilePhotoState(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserYogaSalaPlus?,imageBytes: freezed == imageBytes ? _self.imageBytes : imageBytes // ignore: cast_nullable_to_non_nullable
 as Uint8List?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as FormzSubmissionStatus,
+as FormzSubmissionStatus,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as Failure?,
   ));
 }
 

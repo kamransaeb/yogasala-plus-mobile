@@ -5,8 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:enterprise_ui/enterprise_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yogasala_plus_mobile/core/constants/app_assets_icons.dart';
 import 'package:yogasala_plus_mobile/core/constants/app_dimensions.dart';
+import 'package:yogasala_plus_mobile/core/constants/app_icons.dart';
 import 'package:yogasala_plus_mobile/core/navigation/app_router.dart';
 import 'package:yogasala_plus_mobile/core/widgets/svg_icon.dart';
 import 'package:yogasala_plus_mobile/features/onboarding/presentation/bloc/onboarding_date_of_birth/onboarding_date_of_birth_bloc.dart';
@@ -61,7 +61,7 @@ class _DateOfBirthField extends StatelessWidget {
             margin: EdgeInsets.only(
               bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
             ),
-            padding: const EdgeInsets.all(AppDimensions.pagePadding),
+            padding: const EdgeInsets.all(AppDimensions.p24),
             child: BlocProvider.value(
               value: bloc,
               child: const OnboardingDateOfBirthCupertinoPicker(),
@@ -98,7 +98,7 @@ class _DateOfBirthField extends StatelessWidget {
             color: theme.colorScheme.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
-                AppDimensions.borderRadius,
+                AppDimensions.fullBorderRadius,
               ),
               side: BorderSide(
                 color: theme.colorScheme.outline,
@@ -107,7 +107,7 @@ class _DateOfBirthField extends StatelessWidget {
             ),
             child: InkWell(
               borderRadius: BorderRadius.circular(
-                AppDimensions.borderRadius,
+                AppDimensions.fullBorderRadius,
               ),
               onTap: () => unawaited(_openPicker(context)),
               child: SizedBox(
@@ -124,10 +124,10 @@ class _DateOfBirthField extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                        right: AppDimensions.contentPadding,
+                        right: AppDimensions.p16,
                       ),
                       child: SvgIcon(
-                        asset: AppAssetsIcons.arrowDown,
+                        asset: AppIcons.arrowDown,
                         size: AppDimensions.iconSizeSmall,
                         color: theme.colorScheme.onSurface,
                       ),
@@ -159,7 +159,7 @@ class _NextButton extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: AppDimensions.pagePadding),
+        padding: const EdgeInsets.only(bottom: AppDimensions.p24),
         child: AppButton(
           size: AppButtonSize.large,
           label: 'next'.tr(),

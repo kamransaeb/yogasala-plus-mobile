@@ -25,6 +25,8 @@ class AppConfig {
     required this.apiBaseUrl,
     required this.enableLogging,
     required this.firebaseOptions,
+    required this.revenueCatApiKeyIos,
+    required this.revenueCatApiKeyAndroid,
   });
 
   /// Factory constructor for AppConfig
@@ -35,6 +37,8 @@ class AppConfig {
       apiBaseUrl: dotenv.env['API_BASE_URL'] ?? '',
       enableLogging: dotenv.env['ENABLE_LOGGING']?.toLowerCase() == 'true',
       firebaseOptions: _firebaseOptions(flavor),
+      revenueCatApiKeyIos: dotenv.env['REVENUECAT_API_KEY_IOS'] ?? '',
+      revenueCatApiKeyAndroid: dotenv.env['REVENUECAT_API_KEY_ANDROID'] ?? '',
     );
   }
 
@@ -52,6 +56,12 @@ class AppConfig {
 
   /// Firebase options
   final FirebaseOptions firebaseOptions;
+
+  /// RevenueCat public SDK key (iOS).
+  final String revenueCatApiKeyIos;
+
+  /// RevenueCat public SDK key (Android).
+  final String revenueCatApiKeyAndroid;
 
   /// Private method to get the Firebase options
   static FirebaseOptions _firebaseOptions(Flavor flavor) {

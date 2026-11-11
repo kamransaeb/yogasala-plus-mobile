@@ -1,0 +1,45 @@
+---
+description: Retrofit API clients, models, datasources, and repositories
+globs: lib/features/**/data/**/*.dart
+alwaysApply: false
+---
+
+# API & data layer
+
+## Endpoints
+
+```dart
+abstract final class LiveSessionsEndpoints {
+  static const String liveSessions = '/mobile/user/live-sessions';
+}
+```
+
+Prefer `/mobile/user/...` (auth). Open bootstrap uses `/open/mobile/...`.
+
+## Retrofit client
+
+```dart
+@lazySingleton
+@RestApi()
+abstract class XApiClient {
+  @factoryMethod
+  factory XApiClient(DioClient dioClient) => _XApiClient(dioClient.dio);
+
+  @GET(XEndpoints.path)
+  @Extra({NetworkConstants.forceRefreshExtraKey: true})
+  Future<HttpResponse<Model>> getThing();
+}
+```
+
+## Models
+
+- `@JsonSerializable()` + `part '...g.dart'` (not freezed for DTOs)
+- Implement `ModelToEntityMapper<Entity>` with `toEntity()`
+- Wire enums as `int` / `List<int>` → `Enum.fromWire`
+
+## Datasource / repository
+
+- DS: thin wrapper returning models / `response.data`
+- Repo impl: `XRepositoryImpl` in `data/repositories/` with `@LazySingleton(as: XRepository)`
+- Map to entities; return `Either` (API repos use `ErrorHandler`; SDK adapters may map locally)
+- SDK-backed ports (RevenueCat, etc.) still use `*RepositoryImpl` — never `*Service`

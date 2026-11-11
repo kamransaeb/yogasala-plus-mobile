@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:yogasala_plus_mobile/features/app/domain/usecases/get_app_data_use_case.dart';
+import 'package:yogasala_plus_mobile/features/app/domain/use_cases/get_app_data_use_case.dart';
 import 'package:yogasala_plus_mobile/features/profile/domain/entities/user_yoga_sala_plus.dart';
-import 'package:yogasala_plus_mobile/features/profile/domain/usecases/complete_user_yoga_sala_plus_use_case.dart';
+import 'package:yogasala_plus_mobile/features/profile/domain/use_cases/complete_user_yoga_sala_plus_use_case.dart';
 
 part 'onboarding_agreements_event.dart';
 part 'onboarding_agreements_state.dart';

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:enterprise_ui/enterprise_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
@@ -141,13 +142,14 @@ class PermissionHelper {
         title: Text('permission_required_title'.tr()),
         content: Text(rationaleMessage(type)),
         actions: [
-          TextButton(
+          AppButton(
+            variant: AppButtonVariant.text,
+            label: 'not_now'.tr(),
             onPressed: () => Navigator.pop(context, false),
-            child: Text('not_now'.tr()),
           ),
-          ElevatedButton(
+          AppButton(
+            label: 'continue'.tr(),
             onPressed: () => Navigator.pop(context, true),
-            child: Text('continue'.tr()),
           ),
         ],
       ),
@@ -166,16 +168,17 @@ class PermissionHelper {
         title: Text('permission_denied_title'.tr()),
         content: Text(deniedMessage(type)),
         actions: [
-          TextButton(
+          AppButton(
+            variant: AppButtonVariant.text,
+            label: 'cancel'.tr(),
             onPressed: () => Navigator.pop(context),
-            child: Text('cancel'.tr()),
           ),
-          ElevatedButton(
+          AppButton(
+            label: 'open_settings'.tr(),
             onPressed: () async {
               Navigator.pop(context);
               await openSettings();
             },
-            child: Text('open_settings'.tr()),
           ),
         ],
       ),

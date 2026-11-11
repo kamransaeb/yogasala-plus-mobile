@@ -55,14 +55,14 @@ class _LocaleChip extends StatelessWidget {
     return Material(
       color: background,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
+        borderRadius: BorderRadius.circular(AppDimensions.fullBorderRadius),
         side: BorderSide(
           color: borderColor,
           width: AppDimensions.borderLineWidth,
         ),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
+        borderRadius: BorderRadius.circular(AppDimensions.fullBorderRadius),
         onTap: () => context.read<AppBloc>().add(
           AppEvent.localeChanged(locale: code),
         ),

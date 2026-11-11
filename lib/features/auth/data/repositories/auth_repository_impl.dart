@@ -7,6 +7,7 @@ import 'package:yogasala_plus_mobile/features/auth/data/datasources/auth_remote_
 import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_tokens.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/entities/auth_user.dart';
 import 'package:yogasala_plus_mobile/features/auth/domain/repositories/auth_repository.dart';
+import 'package:yogasala_plus_mobile/features/profile/domain/entities/user_yoga_sala_plus.dart';
 
 /// The implementation of the [AuthRepository].
 @LazySingleton(as: AuthRepository)
@@ -80,6 +81,36 @@ class AuthRepositoryImpl implements AuthRepository {
           e,
           stackTrace: stackTrace,
           reason: 'refreshTokens',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> getValidAccessToken() async {
+    try {
+      final cached = await _local.getCachedAuthTokens();
+      if (cached != null && !cached.toEntity().isExpired()) {
+        return Right(cached.accessToken);
+      }
+      final refreshed = await refreshAuthTokens();
+      return refreshed.fold(Left.new, (tokens) {
+        if (tokens.accessToken.isEmpty) {
+          return Left(
+            _errorHandler.handleError(
+              StateError('Empty access token after refresh'),
+              reason: 'getValidAccessToken',
+            ),
+          );
+        }
+        return Right(tokens.accessToken);
+      });
+    } on Object catch (e, stackTrace) {
+      return Left(
+        _errorHandler.handleError(
+          e,
+          stackTrace: stackTrace,
+          reason: 'getValidAccessToken',
         ),
       );
     }
